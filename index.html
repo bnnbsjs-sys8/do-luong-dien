@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ôn Tập & Thi Thử Kỹ Thuật Đo Lường Điện (TEE0327) - ĐH Kỹ Thuật Công Nghiệp Thái Nguyên (TNUT)</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --primary-soft: #dbeafe;
+      --success: #15803d;
+      --success-soft: #dcfce7;
+      --success-border: #86efac;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --danger-border: #fca5a5;
+      --warning: #b45309;
+      --warning-soft: #fef3c7;
+      --radius: 12px;
+      --shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      --transition: 0.16s ease;
+    }
+
+    body.dark-mode {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-alt: #1e293b;
+      --border: #334155;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-soft: rgba(59, 130, 246, 0.18);
+      --success: #4ade80;
+      --success-soft: rgba(22, 163, 74, 0.2);
+      --success-border: #22c55e;
+      --danger: #f87171;
+      --danger-soft: rgba(220, 38, 38, 0.2);
+      --danger-border: #ef4444;
+      --warning: #fbbf24;
+      --warning-soft: rgba(217, 119, 6, 0.2);
+      --shadow: none;
+    }
+
+    body.lite-mode,
+    body.lite-mode * {
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .app-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .header-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-title h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .brand-title p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-tabs {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 16px 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .tab-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .badge-pill {
+      padding: 1px 7px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .tab-btn.active .badge-pill {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+
+    .util-btn {
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .util-btn.active-toggle {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+      flex: 1;
+    }
+
+    /* Stats Banner */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    /* Filter & Control Toolbar */
+    .toolbar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .select-input {
+      background: var(--surface-alt);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 7px 11px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .toggle-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-label input {
+      accent-color: var(--primary);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    /* Two-column Workspace */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Question Card */
+    .question-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .q-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .q-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tag-code {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .tag-chap {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .tag-lv2 {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .tag-lv3 {
+      background: #fef3c7;
+      color: #b45309;
+    }
+    .tag-lv4 {
+      background: #fae8ff;
+      color: #a21caf;
+    }
+
+    body.dark-mode .tag-lv2 { background: rgba(3, 105, 161, 0.3); color: #7dd3fc; }
+    body.dark-mode .tag-lv3 { background: rgba(180, 83, 9, 0.3); color: #fcd34d; }
+    body.dark-mode .tag-lv4 { background: rgba(162, 28, 175, 0.3); color: #f0abfc; }
+
+    .q-text {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    .q-svg-wrap {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .q-svg {
+      width: 100%;
+      max-width: 390px;
+      height: auto;
+      display: block;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      width: 100%;
+      outline: none;
+      text-align: left;
+      background: var(--surface-alt);
+      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 15px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .option-key {
+      min-width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .option-btn.selected-exam {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      font-weight: 600;
+    }
+
+    .option-btn.correct-choice {
+      border-color: var(--success-border) !important;
+      background: var(--success-soft) !important;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .option-btn.correct-choice .option-key {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+    }
+
+    .option-btn.wrong-choice {
+      border-color: var(--danger-border) !important;
+      background: var(--danger-soft) !important;
+      color: var(--text);
+    }
+
+    .option-btn.wrong-choice .option-key {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    /* Auto-next countdown bar */
+    .auto-next-banner {
+      margin-top: 12px;
+      padding: 9px 12px;
+      background: var(--primary-soft);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border-left: 4px solid var(--primary);
+      background: var(--surface-alt);
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .explanation-box.is-correct {
+      border-left-color: var(--success);
+    }
+
+    .explanation-box.is-wrong {
+      border-left-color: var(--danger);
+    }
+
+    .expl-header {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .expl-body {
+      font-size: 14.5px;
+      color: var(--text);
+      white-space: pre-line;
+    }
+
+    /* Card Footer Nav */
+    .q-footer {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      padding: 9px 15px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: var(--primary);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+    }
+
+    /* Sidebar Palette */
+    .sidebar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 110px;
+    }
+
+    .sidebar-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      max-height: 310px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .pal-btn {
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pal-btn.current {
+      border: 2px solid var(--primary);
+      font-weight: 800;
+    }
+
+    .pal-btn.pal-correct {
+      background: var(--success-soft);
+      border-color: var(--success-border);
+      color: var(--success);
+    }
+
+    .pal-btn.pal-wrong {
+      background: var(--danger-soft);
+      border-color: var(--danger-border);
+      color: var(--danger);
+    }
+
+    .pal-btn.pal-answered {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .pal-btn.pal-flagged {
+      outline: 2px dashed var(--warning);
+    }
+
+    .shortcut-hint {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Exam Header Timer */
+    .exam-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .timer-box {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+      padding: 4px 12px;
+      border-radius: 8px;
+      background: var(--primary-soft);
+    }
+
+    .timer-box.low-time {
+      color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    /* Exam Result Summary */
+    .result-banner {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .score-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .score-box .big {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* Formula & Bank View */
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .formula-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 15px;
+    }
+
+    .formula-card h3 {
+      font-size: 14.5px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    .formula-card ul {
+      padding-left: 18px;
+      font-size: 13.5px;
+    }
+
+    .formula-card li {
+      margin-bottom: 5px;
+    }
+
+    /* Modal & Toast */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      max-width: 440px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .toast-box {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      background: #1e293b;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      z-index: 120;
+      display: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-badge">TNUT • TEE0327</span>
+        <div class="brand-title">
+          <h1>Hệ Thống Ôn Tập & Thi Thử Kỹ Thuật Đo Lường Điện</h1>
+          <p>Khoa Điện Tử • Bộ môn Đo lường Điều khiển • ĐH Kỹ thuật Công nghiệp Thái Nguyên (131 câu chuẩn)</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button type="button" id="btnLiteMode" class="util-btn" onclick="toggleLiteMode()" title="Tắt hiệu ứng chuyển cảnh giúp máy yếu chạy siêu mượt">
+          ⚡ Máy yếu: <span id="liteStatusText">Bật</span>
+        </button>
+        <button type="button" id="btnDarkMode" class="util-btn" onclick="toggleDarkMode()">
+          🌙 Giao diện Tối
+        </button>
+        <button type="button" id="btnResetAll" class="util-btn" onclick="openResetModal()">
+          🔄 Xóa lịch sử
+        </button>
+      </div>
+    </div>
+    <nav class="nav-tabs" aria-label="Chế độ học tập">
+      <button type="button" id="tabPractice" class="tab-btn active" onclick="switchMode('practice')">
+        📚 Ôn tập theo Cấp độ & Chương <span class="badge-pill" id="badgeTotalCount">131</span>
+      </button>
+      <button type="button" id="tabWrong" class="tab-btn" onclick="switchMode('wrong')">
+        🔁 Làm lại câu sai <span class="badge-pill" id="badgeWrongCount">0</span>
+      </button>
+      <button type="button" id="tabExam" class="tab-btn" onclick="switchMode('exam')">
+        📝 Thi thử 40 câu chuẩn TNUT <span class="badge-pill">0,2đ/câu</span>
+      </button>
+      <button type="button" id="tabFormulas" class="tab-btn" onclick="switchMode('formulas')">
+        📐 Sổ tay Công thức & Tra cứu
+      </button>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <!-- Global Progress Bar -->
+    <section class="stats-bar" aria-label="Thống kê tiến độ">
+      <div class="stat-card">
+        <div>
+          <div class="stat-label">Tổng ngân hàng TNUT</div>
+          <div class="stat-value" id="statTotal">131 câu</div>
+        </div>
+        <span style="font-size:22px;">📘</span>
+      </div>
+      <div class="stat-card">
+        <div>
+          <div class="stat-label">Đã làm đúng (Thuộc)</div>
+          <div class="stat-value" style="color:var(--success);" id="statMastered">0 / 131</div>
+        </div>
+        <span style="font-size:22px;">✅</span>
+      </div>
+      <div class="stat-card">
+        <div>
+          <div class="stat-label">Câu đang sai cần làm lại</div>
+          <div class="stat-value" style="color:var(--danger);" id="statWrong">0 câu</div>
+        </div>
+        <span style="font-size:22px;">🎯</span>
+      </div>
+      <div class="stat-card">
+        <div>
+          <div class="stat-label">Tỷ lệ chính xác phiên này</div>
+          <div class="stat-value" style="color:var(--primary);" id="statAccuracy">0%</div>
+        </div>
+        <span style="font-size:22px;">📊</span>
+      </div>
+    </section>
+
+    <!-- VIEW 1 & 2: PRACTICE & WRONG RETRY MODE -->
+    <section id="viewPractice">
+      <div class="toolbar-card" id="practiceToolbar">
+        <div class="filter-group">
+          <label for="selectChapter" style="font-size:13px;font-weight:700;">Chương:</label>
+          <select id="selectChapter" class="select-input" onchange="applyPracticeFilters()">
+            <option value="all">Tất cả 8 chương (131 câu)</option>
+            <option value="2">Chương 2: Thiết bị đo (17 câu)</option>
+            <option value="3">Chương 3: Gia công kết quả đo (17 câu)</option>
+            <option value="4">Chương 4: Mạch xử lý tín hiệu đo (14 câu)</option>
+            <option value="5">Chương 5: Cảm biến sơ cấp (16 câu)</option>
+            <option value="6">Chương 6: Đo dòng điện và điện áp (18 câu)</option>
+            <option value="7">Chương 7: Đo công suất và năng lượng (13 câu)</option>
+            <option value="8">Chương 8: Đo tần số và góc pha (18 câu)</option>
+            <option value="9">Chương 9: Đo thông số mạch điện (18 câu)</option>
+          </select>
+
+          <label for="selectLevel" style="font-size:13px;font-weight:700;">Cấp độ TNUT:</label>
+          <select id="selectLevel" class="select-input" onchange="applyPracticeFilters()">
+            <option value="all">Tất cả cấp độ (131 câu)</option>
+            <option value="2">Cấp độ 2 - Thông hiểu (59 câu)</option>
+            <option value="3">Cấp độ 3 - Vận dụng (68 câu)</option>
+            <option value="4">Cấp độ 4 - Vận dụng cao (4 câu)</option>
+          </select>
+
+          <label for="selectOrder" style="font-size:13px;font-weight:700;">Thứ tự:</label>
+          <select id="selectOrder" class="select-input" onchange="applyPracticeFilters()">
+            <option value="seq">Theo thứ tự đề cương</option>
+            <option value="random">Trộn ngẫu nhiên</option>
+            <option value="level_asc">Cấp độ dễ → khó (2 → 3 → 4)</option>
+            <option value="level_desc">Cấp độ khó → dễ (4 → 3 → 2)</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="toggle-label" title="Khi chọn đáp án đúng sẽ tự động chuyển sang câu kế tiếp">
+            <input type="checkbox" id="chkAutoNext" checked onchange="updateSettings()" />
+            ⚡ Tự qua câu khi ĐÚNG
+          </label>
+          <select id="selectAutoDelay" class="select-input" onchange="updateSettings()" title="Thời gian chờ trước khi tự chuyển câu">
+            <option value="900">Nhanh (0.9s)</option>
+            <option value="1400" selected>Vừa (1.4s)</option>
+            <option value="2500">Chậm (2.5s)</option>
+          </select>
+          <label class="toggle-label" title="Tự động bỏ qua các câu bạn đã làm đúng trước đó để chỉ làm câu mới hoặc câu sai">
+            <input type="checkbox" id="chkSkipMastered" onchange="applyPracticeFilters()" />
+            ⏭️ Bỏ qua câu đã thuộc
+          </label>
+        </div>
+      </div>
+
+      <!-- Wrong mode header notice -->
+      <div id="wrongModeBanner" class="toolbar-card hidden" style="border-color:var(--danger-border);background:var(--danger-soft);">
+        <div>
+          <strong style="color:var(--danger);font-size:14.5px;">🔁 Chế độ Làm lại câu sai (Luyện đến khi đúng 100%)</strong>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:2px;">
+            Khi bạn trả lời ĐÚNG một câu trong danh sách này, câu đó sẽ được gỡ khỏi danh sách câu sai. Nếu trả lời SAI, hệ thống sẽ giữ lại để bạn ôn tiếp!
+          </p>
+        </div>
+        <div class="filter-group">
+          <label class="toggle-label">
+            <input type="checkbox" id="chkAutoRemoveWrong" checked onchange="updateSettings()" />
+            Tự xóa khỏi câu sai khi làm đúng
+          </label>
+          <button type="button" class="btn btn-primary" onclick="restartWrongSession()">🔄 Làm lại lượt câu sai</button>
+        </div>
+      </div>
+
+      <div id="practiceEmptyState" class="question-card hidden" style="text-align:center;padding:36px 20px;">
+        <div style="font-size:40px;margin-bottom:10px;">🎉</div>
+        <h2 style="font-size:19px;margin-bottom:8px;" id="emptyTitle">Không có câu hỏi nào trong bộ lọc này!</h2>
+        <p style="color:var(--text-muted);font-size:14px;max-width:520px;margin:0 auto 16px;" id="emptyDesc">
+          Bạn đã hoàn thành toàn bộ câu hỏi hoặc chưa có câu nào bị sai.
+        </p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button type="button" class="btn btn-primary" onclick="disableSkipMastered()">Hiển thị lại tất cả câu hỏi</button>
+          <button type="button" class="btn" onclick="switchMode('exam')">📝 Vào thi thử 40 câu chuẩn TNUT</button>
+        </div>
+      </div>
+
+      <div class="workspace-grid" id="practiceWorkspace">
+        <!-- Active Question Card -->
+        <div class="question-card" id="questionCardContainer">
+          <div class="q-meta">
+            <div class="q-badges">
+              <span class="tag tag-code" id="qPosBadge">Câu 1 / 131</span>
+              <span class="tag tag-code" id="qCodeBadge">Câu 2.2.0,2.58</span>
+              <span class="tag tag-chap" id="qChapBadge">Chương 2</span>
+              <span class="tag tag-lv2" id="qLevelBadge">Cấp độ 2 • 0,2đ</span>
+            </div>
+            <div class="q-badges">
+              <span class="tag" id="qHistoryBadge" style="background:var(--surface-alt);color:var(--text-muted);">Chưa làm</span>
+              <button type="button" class="util-btn" id="btnResetCurrentQ" onclick="retryCurrentQuestion()" title="Làm lại câu hiện tại">
+                ↺ Làm lại câu này
+              </button>
+            </div>
+          </div>
+
+          <div class="q-text" id="qContentText"></div>
+          <div class="q-svg-wrap hidden" id="qSvgContainer"></div>
+
+          <div class="options-list" id="qOptionsList"></div>
+
+          <div id="autoNextBanner" class="auto-next-banner hidden">
+            <span id="autoNextText">✅ Chính xác! Tự động chuyển sang câu tiếp theo...</span>
+            <button type="button" class="util-btn" onclick="cancelAutoNext()">⏸ Dừng để đọc giải thích</button>
+          </div>
+
+          <div id="qExplanationBox" class="explanation-box hidden">
+            <div class="expl-header">
+              <span id="explStatusTitle">💡 Giải thích chi tiết đáp án</span>
+              <span id="explCorrectKey" style="font-size:12.5px;color:var(--primary);"></span>
+            </div>
+            <div class="expl-body" id="explBodyText"></div>
+          </div>
+
+          <div class="q-footer">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn" id="btnPrevQ" onclick="navigateQuestion(-1)">← Câu trước</button>
+              <button type="button" class="btn btn-primary" id="btnNextQ" onclick="navigateQuestion(1)">Câu tiếp theo →</button>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn" id="btnRetryWrongInList" onclick="filterOnlyWrongInCurrent()">
+                🔁 Làm lại câu sai trong mục này
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Palette Sidebar -->
+        <aside class="sidebar-card">
+          <div class="sidebar-title">
+            <span>Danh sách câu hỏi</span>
+            <span id="sidebarProgressText" style="font-size:12px;color:var(--text-muted);">0 / 131</span>
+          </div>
+          <div class="palette-grid" id="practicePaletteGrid"></div>
+          <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="util-btn" style="flex:1;justify-content:center;" onclick="jumpToFirstUnanswered()">
+              ⏩ Tới câu chưa làm
+            </button>
+            <button type="button" class="util-btn" style="flex:1;justify-content:center;" onclick="resetCurrentFilterSession()">
+              🔄 Làm lại mục này
+            </button>
+          </div>
+          <div class="shortcut-hint">
+            <strong>Phím tắt nhanh:</strong> Bấm <code>1-4</code> hoặc <code>A-D</code> chọn đáp án • <code>→</code> / <code>Space</code> qua câu tiếp • <code>←</code> câu trước • <code>R</code> làm lại câu này.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- VIEW 3: STANDARD 40-QUESTION MOCK EXAM (TNUT STRUCTURE) -->
+    <section id="viewExam" class="hidden">
+      <div class="exam-bar">
+        <div>
+          <h2 style="font-size:16px;font-weight:800;">📝 Thi Thử Tiêu Chuẩn 40 Câu – ĐH Kỹ Thuật Công Nghiệp Thái Nguyên</h2>
+          <p style="font-size:12.5px;color:var(--text-muted);">
+            Cấu trúc chuẩn học phần TEE0327: 40 câu trắc nghiệm × 0,2 điểm = 8,0 điểm (Quy đổi song song thang 10,0) • Phân bổ đều 8 chương (5 câu/chương)
+          </p>
+        </div>
+        <div class="filter-group">
+          <select id="selectExamPreset" class="select-input" onchange="generateNewExam()">
+            <option value="random">🎲 Đề ngẫu nhiên chuẩn ma trận TNUT (40 câu)</option>
+            <option value="de1">📄 Đề chuẩn cố định số 01 (40 câu)</option>
+            <option value="de2">📄 Đề chuẩn cố định số 02 (40 câu)</option>
+            <option value="de3">📄 Đề chuẩn cố định số 03 (40 câu)</option>
+            <option value="hard">🔥 Đề luyện câu Vận dụng & Vận dụng cao (40 câu)</option>
+          </select>
+          <select id="selectExamDuration" class="select-input" onchange="changeExamDuration()">
+            <option value="45">⏱️ 45 phút</option>
+            <option value="60" selected>⏱️ 60 phút (Chuẩn)</option>
+            <option value="90">⏱️ 90 phút</option>
+          </select>
+          <label class="toggle-label" title="Xem ngay đáp án và lời giải sau mỗi câu trong lúc thi thử">
+            <input type="checkbox" id="chkExamInstantFeedback" onchange="renderExamQuestion()" />
+            Hiện giải thích ngay
+          </label>
+          <div class="timer-box" id="examTimerDisplay">60:00</div>
+          <button type="button" class="btn btn-primary" id="btnSubmitExam" onclick="submitExam()">Nộp bài & Chấm điểm</button>
+          <button type="button" class="btn" onclick="generateNewExam()">🔄 Tạo đề mới</button>
+        </div>
+      </div>
+
+      <!-- Exam Result Summary Banner (Hidden until submitted) -->
+      <div id="examResultBanner" class="result-banner hidden">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;">
+          <div>
+            <h3 style="font-size:18px;font-weight:800;" id="examResultHeadline">Kết quả bài thi thử 40 câu chuẩn TNUT</h3>
+            <p style="font-size:13.5px;color:var(--text-muted);" id="examResultSubline"></p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-danger" id="btnRetryExamWrong" onclick="retryExamWrongQuestions()">
+              🔁 Làm lại các câu sai trong đề này
+            </button>
+            <button type="button" class="btn btn-primary" onclick="generateNewExam()">📝 Làm đề thi thử mới</button>
+          </div>
+        </div>
+        <div class="score-grid">
+          <div class="score-box">
+            <div class="stat-label">Số câu trả lời đúng</div>
+            <div class="big" id="resCorrectCount">0 / 40</div>
+          </div>
+          <div class="score-box">
+            <div class="stat-label">Điểm ngân hàng (0,2đ/câu)</div>
+            <div class="big" id="resScore8">0,0 / 8,0</div>
+          </div>
+          <div class="score-box">
+            <div class="stat-label">Điểm quy đổi thang 10</div>
+            <div class="big" id="resScore10">0,00 / 10</div>
+          </div>
+          <div class="score-box">
+            <div class="stat-label">Xếp loại học phần TNUT</div>
+            <div class="big" id="resGradeLetter">-</div>
+          </div>
+        </div>
+        <div id="examChapterBreakdown" style="font-size:13px;color:var(--text-muted);margin-top:8px;"></div>
+      </div>
+
+      <!-- Exam Workspace -->
+      <div class="workspace-grid">
+        <div class="question-card">
+          <div class="q-meta">
+            <div class="q-badges">
+              <span class="tag tag-code" id="examQPosBadge">Câu 1 / 40</span>
+              <span class="tag tag-code" id="examQCodeBadge"></span>
+              <span class="tag tag-chap" id="examQChapBadge"></span>
+              <span class="tag tag-lv2" id="examQLevelBadge"></span>
+            </div>
+            <button type="button" class="util-btn" id="btnFlagExamQ" onclick="toggleFlagExamQuestion()">
+              🚩 Đánh dấu xem lại
+            </button>
+          </div>
+
+          <div class="q-text" id="examQContentText"></div>
+          <div class="q-svg-wrap hidden" id="examQSvgContainer"></div>
+          <div class="options-list" id="examQOptionsList"></div>
+
+          <div id="examExplanationBox" class="explanation-box hidden">
+            <div class="expl-header">
+              <span id="examExplStatusTitle">💡 Giải thích chi tiết đáp án</span>
+              <span id="examExplCorrectKey" style="font-size:12.5px;color:var(--primary);"></span>
+            </div>
+            <div class="expl-body" id="examExplBodyText"></div>
+          </div>
+
+          <div class="q-footer">
+            <div style="display:flex;gap:8px;">
+              <button type="button" class="btn" id="btnExamPrev" onclick="navigateExamQuestion(-1)">← Câu trước</button>
+              <button type="button" class="btn btn-primary" id="btnExamNext" onclick="navigateExamQuestion(1)">Câu tiếp theo →</button>
+            </div>
+            <span id="examAnsweredCounter" style="font-size:13px;font-weight:700;color:var(--text-muted);">Đã chọn: 0 / 40 câu</span>
+          </div>
+        </div>
+
+        <aside class="sidebar-card">
+          <div class="sidebar-title">
+            <span>Phiếu trả lời 40 câu</span>
+            <span id="examSidebarStatus" style="font-size:12px;color:var(--primary);">Đang làm bài</span>
+          </div>
+          <div class="palette-grid" id="examPaletteGrid"></div>
+          <div style="margin-top:12px;font-size:12px;color:var(--text-muted);display:flex;flex-direction:column;gap:4px;">
+            <div>🔵 Màu xanh dương: Đã chọn đáp án</div>
+            <div>🚩 Viền nét đứt cam: Đánh dấu xem lại</div>
+            <div>🟢 / 🔴 (Sau khi nộp): Câu Đúng / Câu Sai</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- VIEW 4: FORMULA CHEAT SHEET & FULL BANK BROWSER -->
+    <section id="viewFormulas" class="hidden">
+      <div class="toolbar-card">
+        <div>
+          <h2 style="font-size:16px;font-weight:800;">📐 Sổ Tay Công Thức Cốt Lõi & Tra Cứu Nhanh 131 Câu Hỏi TNUT</h2>
+          <p style="font-size:12.5px;color:var(--text-muted);">Tóm tắt toàn bộ công thức tính nhanh từ Chương 2 đến Chương 9 phục vụ giải đề trong 10 giây</p>
+        </div>
+        <div class="filter-group">
+          <input type="text" id="inputSearchBank" class="select-input" style="min-width:260px;" placeholder="🔍 Tìm câu hỏi, mã câu (VD: Anderson, 250, 4-20mA)..." oninput="renderBankSearch()" />
+        </div>
+      </div>
+
+      <div class="formula-grid">
+        <div class="formula-card">
+          <h3>Chương 2: Thiết bị đo & Đặc tính</h3>
+          <ul>
+            <li><strong>Thang đo (Phạm vi đo):</strong> <code>S = x_max - x_min</code></li>
+            <li><strong>Độ phân giải tương đối:</strong> <code>D% = (ε / S) × 100%</code></li>
+            <li><strong>Ngưỡng nhạy:</strong> <code>ε = D × S</code></li>
+            <li><strong>Khả năng phân ly:</strong> <code>R = S / ε = 1 / D</code></li>
+            <li><strong>Sai số biến đổi thẳng n khâu:</strong> <code>γ_tổng ≈ ∑γ_i</code></li>
+            <li><strong>Trôi điểm không:</strong> Đường đặc tính dịch song song (<code>y = Kx + Δy</code>). <strong>Lệch nhạy:</strong> Thay đổi độ dốc (<code>y = K'x</code>).</li>
+          </ul>
+        </div>
+        <div class="formula-card">
+          <h3>Chương 3: Gia công kết quả đo</h3>
+          <ul>
+            <li><strong>Sai số tuyệt đối giới hạn:</strong> <code>ΔX_max = ± (C% × X_max) / 100</code></li>
+            <li><strong>Sai số tương đối tại giá trị X:</strong> <code>γ_X = ± C% × (X_max / X)</code></li>
+            <li><strong>Đo qua TI và Ampe kế:</strong> <code>γ_tổng = γ_TI + γ_A</code></li>
+            <li><strong>Chống nhiễu từ trường:</strong> Bọc màn sắt từ. <strong>Chống nhiễu điện dung/tĩnh điện:</strong> Bọc màn kim loại và nối đất.</li>
+          </ul>
+        </div>
+        <div class="formula-card">
+          <h3>Chương 4: Mạch xử lý tín hiệu đo (Op-Amp)</h3>
+          <ul>
+            <li><strong>Khuếch đại không đảo:</strong> <code>K = 1 + R₂/R₁</code></li>
+            <li><strong>Khuếch đại đảo:</strong> <code>U_out = -(R₂/R₁)·U_in</code> (Nếu <code>|U_out| > U_bh</code> thì ghim ở <code>±U_bh</code>)</li>
+            <li><strong>Đổi dòng 4–20mA sang áp:</strong> <code>U = I · R</code> (Tại 50% dải đo: <code>I = 12 mA</code>)</li>
+            <li><strong>Hệ số biến đổi U → I:</strong> <code>K_UI = ΔI / ΔU</code> (1–5V → 4–20mA có <code>K = 4 mA/V</code>)</li>
+          </ul>
+        </div>
+        <div class="formula-card">
+          <h3>Chương 5: Cảm biến sơ cấp</h3>
+          <ul>
+            <li><strong>Biến trở thẳng / xoay:</strong> <code>R_x = R · (x / L)</code> hoặc <code>R · (α / α_max)</code></li>
+            <li><strong>Nhiệt điện trở Pt100:</strong> <code>R(t) = 100 + 0,385 · t</code> (Ở 100°C → <code>138,5 Ω</code>)</li>
+            <li><strong>Độ nhạy & Ngưỡng nhận biết:</strong> <code>S = ΔU / ΔP</code>; <code>ΔP_min = U_nhiễu / S</code></li>
+            <li><strong>Cầu 4 nhánh Tenzo tích cực + KĐ đảo:</strong> <code>U_ra = -K_kd · E_n · (ΔR / R₀)</code></li>
+          </ul>
+        </div>
+        <div class="formula-card">
+          <h3>Chương 6: Đo dòng điện & Điện áp</h3>
+          <ul>
+            <li><strong>Dòng khi mắc Ampe kế:</strong> <code>I = U / (R_t + R_A)</code>; Sai số phụ: <code>γ_I = R_A / (R_t + R_A)</code></li>
+            <li><strong>Mở rộng thang Ampe kế (Shunt):</strong> <code>R_sh = R_cc / (n - 1)</code> với <code>n = I / I_cc</code></li>
+            <li><strong>Mở rộng thang Vôn kế:</strong> Tổng trở <code>R_V = U / I_cc</code>; Điện trở phụ <code>R_p = R_V - R_cc</code></li>
+            <li><strong>An toàn biến dòng (TI):</strong> Tuyệt đối <strong>KHÔNG hở mạch thứ cấp</strong> khi sơ cấp có dòng.</li>
+          </ul>
+        </div>
+        <div class="formula-card">
+          <h3>Chương 7, 8, 9: Công suất, Tần số & Cầu đo</h3>
+          <ul>
+            <li><strong>Công suất & Công tơ:</strong> <code>P = S·cosφ</code>; <code>A_thực = K_I·K_U·A_đọc</code>; <code>N = C·A = C·P·t</code></li>
+            <li><strong>Đo tần số & Góc pha:</strong> <code>f = I / (2πCU) = U / (2πLI) = N / T_c</code>; <code>φ = (Δt / T)·360°</code>; <code>γ_q = ±1/N</code></li>
+            <li><strong>So sánh R:</strong> Nối tiếp <code>R_x = R₀·(U_x/U₀)</code>; Song song <code>R_x = R₀·(I₀/I_x)</code></li>
+            <li><strong>Cầu Anderson:</strong> <code>R_x = R₂R₃/R₄</code>; <code>L_x = C·[R₃R₄ + r(R₃+R₄)]</code></li>
+            <li><strong>Cầu Schering:</strong> <code>R_x = R₂(C₁/C₃)</code>; <code>C_x = C₃(R₂/R₁)</code>; <code>D = 2πf·C₁R₁</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <h3 style="font-size:15.5px;margin-bottom:12px;" id="searchResultCountTitle">Danh sách tra cứu toàn bộ 131 câu hỏi & đáp án</h3>
+        <div id="bankSearchList" style="display:flex;flex-direction:column;gap:10px;"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- In-page Confirmation Modal (No browser confirm/alert) -->
+  <div class="modal-backdrop" id="resetModal">
+    <div class="modal-card">
+      <h3 style="font-size:17px;margin-bottom:8px;">🔄 Xác nhận xóa lịch sử ôn tập?</h3>
+      <p style="font-size:13.5px;color:var(--text-muted);margin-bottom:16px;">
+        Hành động này sẽ đặt lại số câu đã thuộc, danh sách câu sai và kết quả phiên hiện tại về ban đầu.
+      </p>
+      <div style="display:flex;justify-content:flex-end;gap:8px;">
+        <button type="button" class="btn" onclick="closeResetModal()">Hủy bỏ</button>
+        <button type="button" class="btn btn-danger" onclick="confirmResetAll()">Xóa toàn bộ lịch sử</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-box" id="toastBox"></div>
+
+  <script>
+    const QUESTIONS = [{"id": 1, "code": "2.2.0,2.58", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Một thiết bị đo có quan hệ danh định y = f(x). Khi nói đến đặc tính tĩnh của thiết bị đo, ta đang xét quan hệ này trong điều kiện nào?", "svg": "", "options": ["a. Đại lượng đo biến đổi rất nhanh theo thời gian", "b. Đại lượng đo không đổi hoặc thay đổi rất chậm", "c. Thiết bị vừa mới khởi động", "d. Mạch đo đang bị quá tải"], "correct": 1, "explanation": "Đặc tính tĩnh y = f(x) của thiết bị đo được xét ở trạng thái xác lập, tức là khi đại lượng đo x không đổi theo thời gian hoặc biến thiên rất chậm."}, {"id": 2, "code": "2.2.0,2.59", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Vì sao số lượng khâu biến đổi trong thiết bị đo biến đổi thẳng cần được hạn chế?", "svg": "", "options": ["a. Vì càng nhiều khâu thì thiết bị càng nặng", "b. Vì càng nhiều khâu thì sai số tích lũy của các khâu càng lớn làm giảm độ chính xác của kết quả đo.", "c. Vì càng nhiều khâu thì độ nhạy tăng quá mức", "d. Vì càng nhiều khâu thì thang đo giảm"], "correct": 1, "explanation": "Trong thiết bị đo biến đổi thẳng (mắc nối tiếp các khâu không có hồi tiếp), sai số tương đối toàn mạch bằng tổng sai số của từng khâu (γ ≈ ∑γ_i). Vì vậy càng nhiều khâu thì sai số tích lũy càng lớn, làm giảm độ chính xác."}, {"id": 3, "code": "2.2.0,2.60", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Trong thiết bị đo so sánh không cân bằng, nếu đại lượng bù đã biết và đại lượng chỉ thị khác 0 thì đại lượng đo x được xác định theo nguyên tắc nào?", "svg": "", "options": ["a. x chỉ bằng đại lượng chỉ thị", "b. x bằng đại lượng bù cộng phần sai lệch chỉ thị", "c. x bằng nửa tổng của đại lượng bù và đại lượng chỉ thị", "d. Không thể xác định được x"], "correct": 1, "explanation": "Trong thiết bị đo so sánh không cân bằng, độ lệch giữa đại lượng đo x và đại lượng bù x_k được đọc trên chỉ thị (Δx ≠ 0), nên x = x_k + Δx (bằng đại lượng bù cộng phần sai lệch chỉ thị)."}, {"id": 4, "code": "2.3.0,2.61", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 3, "points": 0.2, "question": "Một thiết bị đo tốc độ quay có phạm vi đo 0-3000 vòng/phút, hiển thị được đến 0,01 vòng/phút. Độ phân giải của thiết bị bằng bao nhiêu?", "svg": "", "options": ["a. 0,3%", "b. 0,03%", "c. 0,00033%", "d. 0,0033%"], "correct": 2, "explanation": "Công thức độ phân giải tương đối: D = (ε / S) × 100%. Với phạm vi đo S = 3000 - 0 = 3000 vòng/phút và ngưỡng hiển thị nhỏ nhất ε = 0,01 vòng/phút ⇒ D = (0,01 / 3000) × 100% ≈ 0,00033%."}, {"id": 5, "code": "2.3.0,2.62", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 3, "points": 0.2, "question": "Một thiết bị đo nhiệt độ có phạm vi đo từ 300°C đến 900°C, có độ phân giải 0,125%. Ngưỡng nhạy của thiết bị bằng bao nhiêu?", "svg": "", "options": ["a. 0,75°C", "b. 7,5°C", "c. 6°C", "d. 0,125°C"], "correct": 0, "explanation": "Thang đo (phạm vi đo) S = x_max - x_min = 900°C - 300°C = 600°C. Ngưỡng nhạy ε = D × S = 0,125% × 600 = (0,125 / 100) × 600 = 0,75°C."}, {"id": 6, "code": "2.2.0,2.63", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Hai thiết bị đo điện áp có cùng thang đo S = 300V. Thiết bị đo A có ngưỡng nhạy 0,5V; thiết bị đo B có ngưỡng nhạy 0,2V. Kết luận nào sau đây là đúng?", "svg": "", "options": ["a. Thiết bị A có khả năng phân ly lớn hơn thiết bị B", "b. Thiết bị B có khả năng phân ly lớn hơn thiết bị A", "c. Hai thiết bị có khả năng phân ly như nhau", "d. Không thể so sánh"], "correct": 1, "explanation": "Khả năng phân ly R = S / ε. Hai thiết bị có cùng thang đo S = 300V, thiết bị B có ngưỡng nhạy nhỏ hơn (ε_B = 0,2V < ε_A = 0,5V) nên R_B = 300/0,2 = 1500 > R_A = 300/0,5 = 600 ⇒ Thiết bị B có khả năng phân ly lớn hơn."}, {"id": 7, "code": "2.3.0,2.64", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 3, "points": 0.2, "question": "Một thiết bị đo có độ nhạy tại 20°C là 0,38 và tại 50°C là 0,34. Độ lệch nhạy tuyệt đối của thiết bị đo khi nhiệt độ thay đổi là bao nhiêu?", "svg": "", "options": ["a. 0,04", "b. 0,34", "c. 0,72", "d. 0,0013"], "correct": 0, "explanation": "Độ lệch nhạy tuyệt đối khi nhiệt độ thay đổi từ 20°C lên 50°C là: ΔS = |S_50 - S_20| = |0,34 - 0,38| = 0,04."}, {"id": 8, "code": "2.3.0,2.65", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 3, "points": 0.2, "question": "Một thiết bị đo nhiệt độ có phạm vi đo từ 0°C đến 300°C, độ phân giải D = 0,5%. Giá trị ngưỡng nhạy của thiết bị bằng bao nhiêu?", "svg": "", "options": ["a. 1,5°C", "b. 1,0°C", "c. 4,0°C", "d. 10°C"], "correct": 0, "explanation": "Thang đo S = 300°C - 0°C = 300°C. Ngưỡng nhạy của thiết bị: ε = D × S = 0,5% × 300 = 1,5°C."}, {"id": 9, "code": "2.3.0,2.66", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 3, "points": 0.2, "question": "Một thiết bị đo tốc độ có phạm vi đo 0 - 3000 vòng/phút. Nếu ngưỡng nhạy là 0,3 vòng/phút thì khả năng phân ly của thiết bị là bao nhiêu?", "svg": "", "options": ["a. 100", "b. 1000", "c. 10000", "d. 30000"], "correct": 2, "explanation": "Khả năng phân ly của thiết bị: R = S / ε = (3000 - 0) / 0,3 = 10000."}, {"id": 10, "code": "2.2.0,2.67", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Một loadcell tại 20°C có độ nhạy 0,02 mm/kg. Tại 45°C có độ nhạy 0,022 mm/kg và đầu ra tại 0kg là 0,2 mm. Độ lệch độ nhạy và độ trôi điểm không lần lượt bằng bao nhiêu?", "svg": "", "options": ["a. 0,002 mm/kg và 0,2 mm", "b. 0,020 mm/kg và 0,2 mm", "c. 0,002 mm/kg và 0,02 mm", "d. 0,200 mm/kg và 0,2 mm"], "correct": 0, "explanation": "Độ lệch độ nhạy ΔK = |0,022 - 0,020| = 0,002 mm/kg. Độ trôi điểm không là giá trị đầu ra khi tải bằng 0 kg ở 45°C: Δy₀ = 0,2 mm."}, {"id": 11, "code": "2.3.0,2.68", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 3, "points": 0.2, "question": "Một thiết bị đo biến đổi thẳng có 4 khâu, sai lệch tương đối mỗi khâu là 0,5%. Nếu thay bằng thiết bị chỉ còn 2 khâu nhưng vẫn giữ sai lệch 0,5% mỗi khâu, sai lệch tương đối của toàn thiết bị sẽ thay đổi như thế nào?", "svg": "", "options": ["a. Tăng từ 1% lên 2%", "b. Giảm từ khoảng 2% xuống khoảng 1%", "c. Không thay đổi", "d. Không thể xác định"], "correct": 1, "explanation": "Với thiết bị đo biến đổi thẳng gồm n khâu mắc nối tiếp, sai lệch tương đối tổng cộng xấp xỉ n × γ_khâu. Khi giảm từ 4 khâu (4 × 0,5% = 2%) xuống 2 khâu (2 × 0,5% = 1%), sai lệch tương đối giảm từ khoảng 2% xuống khoảng 1%."}, {"id": 12, "code": "2.2.0,2.69", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Một thiết bị đo A có cùng thang đo với thiết bị đo B nhưng khả năng phân ly lớn hơn. Kết luận nào sau đây là đúng?", "svg": "", "options": ["a. Thiết bị đo A luôn có cấp chính xác nhỏ hơn", "b. Thiết bị đó phân biệt được biến thiên đầu vào nhỏ hơn", "c. Thiết bị đó có độ trễ lớn hơn", "d. Thiết bị đó không cần định chuẩn"], "correct": 1, "explanation": "Vì khả năng phân ly R = S / ε nên khi cùng thang đo S, thiết bị A có R lớn hơn nghĩa là ngưỡng nhạy ε nhỏ hơn ⇒ phân biệt được lượng biến thiên đầu vào nhỏ hơn."}, {"id": 13, "code": "2.2.0,2.70", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Trong thiết bị đo so sánh mã hóa bước, nếu bước tăng đại lượng bù càng nhỏ thì điều gì sẽ xảy ra?", "svg": "", "options": ["a. Sai số lượng tử càng nhỏ và kết quả càng chính xác", "b. Thời gian so sánh giảm về 0 nhưng sai số tăng", "c. Khả năng phân ly giảm", "d. Đại lượng chỉ thị luôn bằng 0"], "correct": 0, "explanation": "Trong thiết bị đo so sánh mã hóa bước (ADC/bù số), bước tăng đại lượng bù (bước lượng tử q) càng nhỏ thì sai số lượng tử hóa càng nhỏ và kết quả đo càng chính xác."}, {"id": 14, "code": "2.2.0,2.71", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Một thiết bị đo có quan hệ tuyến tính danh định giữa đầu ra y và đầu vào x. Nếu nhiệt độ môi trường làm đường đặc tính dịch song song lên trên nhưng độ dốc không đổi, hiện tượng này đặc trưng cho loại sai số nào?", "svg": "<svg viewBox=\"0 0 360 190\" class=\"q-svg\" aria-label=\"Đồ thị trôi điểm không\">\n      <defs><marker id=\"arr1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"currentColor\"/></marker></defs>\n      <line x1=\"60\" y1=\"160\" x2=\"310\" y2=\"160\" stroke=\"currentColor\" stroke-width=\"1.8\" marker-end=\"url(#arr1)\"/>\n      <line x1=\"80\" y1=\"175\" x2=\"80\" y2=\"20\" stroke=\"currentColor\" stroke-width=\"1.8\" marker-end=\"url(#arr1)\"/>\n      <text x=\"88\" y=\"28\" font-size=\"12\" fill=\"currentColor\" font-weight=\"600\">Đầu ra y</text>\n      <text x=\"255\" y=\"176\" font-size=\"12\" fill=\"currentColor\" font-weight=\"600\">Đầu vào x</text>\n      <line x1=\"80\" y1=\"160\" x2=\"230\" y2=\"55\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n      <text x=\"235\" y=\"60\" font-size=\"12\" fill=\"#2563eb\" font-style=\"italic\">y = Kx (v = v₀)</text>\n      <line x1=\"80\" y1=\"125\" x2=\"230\" y2=\"20\" stroke=\"#dc2626\" stroke-width=\"2.2\" stroke-dasharray=\"5,3\"/>\n      <text x=\"215\" y=\"24\" font-size=\"12\" fill=\"#dc2626\" font-style=\"italic\">y = Kx + Δy (v ≠ v₀)</text>\n      <line x1=\"45\" y1=\"125\" x2=\"80\" y2=\"125\" stroke=\"currentColor\" stroke-width=\"1\" stroke-dasharray=\"3,3\"/>\n      <line x1=\"58\" y1=\"127\" x2=\"58\" y2=\"158\" stroke=\"#dc2626\" stroke-width=\"1.5\" marker-start=\"url(#arr1)\" marker-end=\"url(#arr1)\"/>\n      <text x=\"32\" y=\"147\" font-size=\"13\" fill=\"#dc2626\" font-weight=\"bold\">Δy</text>\n    </svg>", "options": ["a. Trôi điểm không", "b. Độ trễ", "c. Lệch nhạy", "d. Quá phạm vi"], "correct": 0, "explanation": "Đường đặc tính dịch song song lên trên (y = Kx + Δy) giữ nguyên độ dốc K nhưng tại x = 0 đầu ra bị lệch một lượng Δy ≠ 0. Đây là đặc trưng của sai số cộng tính hay hiện tượng Trôi điểm không (Zero drift)."}, {"id": 15, "code": "2.2.0,2.72", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Một thiết bị đo có quan hệ tuyến tính danh định giữa đầu ra y và đầu vào x. Nếu nhiệt độ môi trường làm độ dốc đường đặc tính thay đổi còn giao điểm với gốc tọa độ gần như giữ nguyên, hiện tượng đặc trưng cho loại sai số nào?", "svg": "<svg viewBox=\"0 0 360 190\" class=\"q-svg\" aria-label=\"Đồ thị lệch độ nhạy\">\n      <defs><marker id=\"arr2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"currentColor\"/></marker></defs>\n      <line x1=\"60\" y1=\"160\" x2=\"310\" y2=\"160\" stroke=\"currentColor\" stroke-width=\"1.8\" marker-end=\"url(#arr2)\"/>\n      <line x1=\"80\" y1=\"175\" x2=\"80\" y2=\"20\" stroke=\"currentColor\" stroke-width=\"1.8\" marker-end=\"url(#arr2)\"/>\n      <text x=\"88\" y=\"28\" font-size=\"12\" fill=\"currentColor\" font-weight=\"600\">Đầu ra y</text>\n      <text x=\"255\" y=\"176\" font-size=\"12\" fill=\"currentColor\" font-weight=\"600\">Đầu vào x</text>\n      <line x1=\"80\" y1=\"160\" x2=\"235\" y2=\"68\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n      <text x=\"240\" y=\"72\" font-size=\"12\" fill=\"#2563eb\" font-style=\"italic\">y = Kx (v = v₀)</text>\n      <line x1=\"80\" y1=\"160\" x2=\"220\" y2=\"28\" stroke=\"#dc2626\" stroke-width=\"2.2\" stroke-dasharray=\"5,3\"/>\n      <text x=\"225\" y=\"34\" font-size=\"12\" fill=\"#dc2626\" font-style=\"italic\">y = K'x (v ≠ v₀)</text>\n    </svg>", "options": ["a. Trôi điểm không", "b. Sai số thô", "c. Lệch nhạy", "d. Quá tải cơ học"], "correct": 2, "explanation": "Đường đặc tính đi qua gốc tọa độ nhưng thay đổi độ dốc từ K sang K' (y = K'x) thể hiện độ nhạy K = dy/dx bị thay đổi theo nhiệt độ. Đây là đặc trưng của sai số nhân tính hay Lệch nhạy (Sensitivity drift)."}, {"id": 16, "code": "2.3.0,2.73", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 3, "points": 0.2, "question": "Một thiết bị đo có phạm vi 0-100 đơn vị, ngưỡng nhạy 0,5 đơn vị. Nếu cải tiến để ngưỡng nhạy còn 0,1 đơn vị thì khả năng phân ly tăng lên bao nhiêu lần?", "svg": "", "options": ["a. 2 lần", "b. 5 lần", "c. 10 lần", "d. 50 lần"], "correct": 1, "explanation": "Khả năng phân ly tỷ lệ nghịch với ngưỡng nhạy (R = S / ε). Khi ngưỡng nhạy giảm từ 0,5 xuống 0,1 đơn vị thì khả năng phân ly tăng lên: 0,5 / 0,1 = 5 lần (từ 200 lên 1000)."}, {"id": 17, "code": "2.2.0,2.74", "chapter": 2, "chapterName": "Chương 2: Thiết bị đo", "level": 2, "points": 0.2, "question": "Phát biểu nào phù hợp nhất để giảm sai số của thiết bị đo biến đổi thẳng?", "svg": "", "options": ["a. Chỉ cần tăng số khâu khuếch đại là sai số giảm", "b. Nâng cao độ chính xác từng khâu và hạn chế số khâu biến đổi", "c. Giảm độ nhạy của thiết bị để giảm sai số", "d. Đổi mọi thiết bị sang loại không cân bằng"], "correct": 1, "explanation": "Để giảm sai số của thiết bị đo biến đổi thẳng, cần nâng cao độ chính xác của từng khâu thành phần và hạn chế tối đa số khâu biến đổi nối tiếp."}, {"id": 18, "code": "3.2.0,2.56", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Nếu thang đo của thiết bị đo lớn hơn rất nhiều so với giá trị đo x, biện pháp nào là phù hợp nhất để giảm sai số đo?", "svg": "", "options": ["a. Tiếp tục dùng thiết bị cũ và bỏ qua sai số", "b. Chọn lại thiết bị có thang đo phù hợp hoặc lựa chọn phương pháp đo so sánh", "c. Tăng điện trở trong của tải", "d. Chỉ đo vào ban ngày"], "correct": 1, "explanation": "Sai số tương đối giới hạn của phép đo γ_x = ± C% × (x_max / x). Nếu thang đo x_max lớn hơn rất nhiều so với giá trị đo x thì γ_x sẽ rất lớn, do đó cần chọn lại thiết bị có thang đo phù hợp (sao cho x nằm ở 2/3 cuối thang đo) hoặc dùng phương pháp đo so sánh."}, {"id": 19, "code": "3.2.0,2.57", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Trong một mạch đo tín hiệu điện mức nhỏ, tín hiệu đo bị ảnh hưởng bởi từ trường bên ngoài gây cảm ứng nhiễu lên dây dẫn và phần tử đo. Để hạn chế ảnh hưởng của loại nhiễu điện từ này, biện pháp nào dưới đây là phù hợp nhất?", "svg": "", "options": ["a. Che chắn bằng vật liệu sắt từ", "b. Tăng điện áp nguồn", "c. Giảm số lần đo", "d. Dùng dây dẫn dài hơn"], "correct": 0, "explanation": "Để chống nhiễu từ trường bên ngoài cảm ứng vào mạch đo tín hiệu nhỏ, biện pháp hiệu quả nhất là bọc màn chắn từ bằng vật liệu sắt từ có độ từ thẩm cao (như Permalloy, tôn silic)."}, {"id": 20, "code": "3.3.0,2.58", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 3, "points": 0.2, "question": "Đo công suất của tải bằng ampe kế và vôn kế. Biết Ampe kế đo được I = 8,5 A và có cấp chính xác 1,5, thang đo 10 A; Volt kế đo được U = 220 V và có cấp chính xác 1,0, thang đo 250V. Sai số tuyệt đối của phép đo dòng điện là:", "svg": "", "options": ["a. 0,085 A", "b. 0,10 A", "c. 0,25 A", "d. 0,15 A"], "correct": 3, "explanation": "Sai số tuyệt đối giới hạn của Ampe kế được tính theo cấp chính xác (1,5) và thang đo (I_max = 10A): ΔI = ± (C% × I_max) / 100 = (1,5 × 10) / 100 = 0,15 A."}, {"id": 21, "code": "3.3.0,2.59", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 3, "points": 0.2, "question": "Một ampe kế có cấp chính xác 1,5, thang đo 10A, khi đo được giá trị 8,0A. Hãy viết kết quả đo của phép đo dòng trên?", "svg": "<svg viewBox=\"0 0 320 200\" class=\"q-svg\" aria-label=\"Đồng hồ Ampe kế 10A cấp chính xác 1,5\">\n      <rect x=\"30\" y=\"10\" width=\"260\" height=\"180\" rx=\"12\" fill=\"#1e293b\" stroke=\"#475569\" stroke-width=\"3\"/>\n      <rect x=\"46\" y=\"24\" width=\"228\" height=\"130\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#94a3b8\" stroke-width=\"2\"/>\n      <path d=\"M 75 125 A 95 95 0 0 1 245 125\" fill=\"none\" stroke=\"#334155\" stroke-width=\"2\"/>\n      <!-- Scale ticks 0 to 10A -->\n      <text x=\"65\" y=\"118\" font-size=\"12\" fill=\"#0f172a\" font-weight=\"bold\">0</text>\n      <text x=\"93\" y=\"78\" font-size=\"12\" fill=\"#0f172a\" font-weight=\"bold\">2</text>\n      <text x=\"132\" y=\"58\" font-size=\"12\" fill=\"#0f172a\" font-weight=\"bold\">4</text>\n      <text x=\"178\" y=\"58\" font-size=\"12\" fill=\"#0f172a\" font-weight=\"bold\">6</text>\n      <text x=\"217\" y=\"78\" font-size=\"12\" fill=\"#dc2626\" font-weight=\"bold\">8</text>\n      <text x=\"242\" y=\"118\" font-size=\"12\" fill=\"#0f172a\" font-weight=\"bold\">10</text>\n      <text x=\"160\" y=\"102\" font-size=\"22\" fill=\"#0f172a\" font-weight=\"bold\" text-anchor=\"middle\" text-decoration=\"underline\">A</text>\n      <!-- Pointer pointing at 8.0 A -->\n      <line x1=\"160\" y1=\"145\" x2=\"215\" y2=\"80\" stroke=\"#dc2626\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n      <circle cx=\"160\" cy=\"145\" r=\"10\" fill=\"#334155\"/>\n      <text x=\"60\" y=\"142\" font-size=\"9\" fill=\"#334155\" font-weight=\"600\">~ ± 1,5</text>\n      <text x=\"205\" y=\"138\" font-size=\"9\" fill=\"#0f172a\" font-weight=\"bold\">10A</text>\n      <text x=\"190\" y=\"148\" font-size=\"8\" fill=\"#334155\">CẤP CHÍNH XÁC 1,5</text>\n    </svg>", "options": ["a. I = 8,0 ± 0,08 A", "b. I = 8,0 ± 0,10 A", "c. I = 8,0 ± 0,15 A", "d. I = 8,0 ± 0,50 A"], "correct": 2, "explanation": "Ta có cấp chính xác của Ampe kế là 1,5 và thang đo I_max = 10A ⇒ Sai số tuyệt đối giới hạn ΔI = (1,5% × 10A) = 0,15 A. Với số chỉ 8,0A, kết quả đo được viết là: I = 8,0 ± 0,15 A."}, {"id": 22, "code": "3.3.0,2.60", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 3, "points": 0.2, "question": "Một biến dòng có tỷ số là 150/5, class 1,0. Ampe kế thứ cấp có class 1,0, thang đo 5 A, đo được giá trị 5A. Bỏ qua sai số khác, sai số tương đối của dòng điện sơ cấp đo được là bao nhiêu?", "svg": "", "options": ["a. 1,0%", "b. 2,0%", "c. 3,0%", "d. 4,0%"], "correct": 1, "explanation": "Khi đo dòng điện qua biến dòng (TI class 1,0 → sai số ±1,0%) và Ampe kế thứ cấp (class 1,0, đo ở đúng toàn thang 5A/5A → sai số ±1,0%), sai số tương đối tổng cực đại của dòng sơ cấp bằng tổng hai sai số: γ = 1,0% + 1,0% = 2,0%."}, {"id": 23, "code": "3.2.0,2.61", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Một volt kế có phạm vi đo 0-600V, cấp chính xác 1,5. Volt kế được dùng để đo điện áp khoảng 60V. Sai số tương đối lớn nhất của kết quả đo lớn hơn bao nhiêu lần so với cấp chính xác của thiết bị?", "svg": "", "options": ["a. 5 lần", "b. 10 lần", "c. 15 lần", "d. 20 lần"], "correct": 1, "explanation": "Sai số tương đối lớn nhất tại U = 60V là γ_max = C% × (U_max / U) = C% × (600 / 60) = 10 × C%. Vậy sai số tương đối lớn nhất gấp 10 lần cấp chính xác của thiết bị."}, {"id": 24, "code": "3.2.0,2.62", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Khi giá trị cần đo nhỏ hơn rất nhiều so với giới hạn trên của thang đo đang sử dụng, biện pháp nào dưới đây phù hợp nhất để nâng cao độ chính xác của phép đo?", "svg": "", "options": ["a. Dùng thêm điện trở phụ để mở rộng thang đo", "b. Chuyển sang phương pháp đo so sánh hoặc chọn thiết bị khác có thang đo nhỏ hơn", "c. Tăng số lần đọc trên cùng thiết bị đo", "d. Giảm điện trở trong của nguồn điện"], "correct": 1, "explanation": "Khi giá trị cần đo nhỏ hơn rất nhiều so với giới hạn trên của thang đo, sai số tương đối sẽ tăng vọt. Biện pháp đúng là chọn thiết bị có thang đo nhỏ hơn phù hợp hoặc chuyển sang phương pháp đo so sánh."}, {"id": 25, "code": "3.2.0,2.63", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Một phép đo thống kê cho độ lệch chuẩn lớn. Điều này cho thấy đặc điểm nào của các kết quả đo?", "svg": "", "options": ["a. Kết quả đo tập trung hơn quanh giá trị trung bình", "b. Kết quả đo phân tán nhiều hơn, độ chính xác thấp hơn", "c. Sai số hệ thống đã bị loại bỏ hoàn toàn", "d. Thiết bị có cấp chính xác nhỏ"], "correct": 1, "explanation": "Độ lệch chuẩn (σ) đặc trưng cho mức độ tản mạn của các lần đo. Độ lệch chuẩn lớn chứng tỏ các kết quả đo phân tán nhiều quanh giá trị trung bình, độ chụm (độ chính xác ngẫu nhiên) thấp."}, {"id": 26, "code": "3.2.0,2.64", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Trong phương pháp hiệu chỉnh thiết bị đo không đúng với mẫu, nếu x0 là sai lệch gốc, xM là số chỉ khi đo mẫu M, còn x1 là số chỉ khi đo đại lượng cần đo, thì vai trò của mẫu M trong phương pháp là gì?", "svg": "", "options": ["a. Làm giảm sai số ngẫu nhiên bằng việc đo lặp", "b. Xác lập hệ số hiệu chỉnh tỷ lệ của thiết bị đo", "c. Khử nhiễu điện trường", "d. Xác định độ trễ của cơ cấu chỉ thị"], "correct": 1, "explanation": "Trong phương pháp hiệu chỉnh theo mẫu M, phép đo mẫu chuẩn M giúp xác lập hệ số hiệu chỉnh tỷ lệ (độ nhạy thực tế K) của thiết bị đo theo công thức x = M · (x₁ - x₀) / (x_M - x₀)."}, {"id": 27, "code": "3.2.0,2.65", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Trong phép đo thống kê, sai số thô cần được phát hiện và loại bỏ trước khi tiến hành bước nào tiếp theo?", "svg": "", "options": ["a. Tính giá trị trung bình và sai số ngẫu nhiên", "b. Chọn thang đo", "c. Xác định độ lệch bình quân phương và đối chiếu loại kết quả không phù hợp", "d. Xác định cấp chính xác của thiết bị đo"], "correct": 2, "explanation": "Quy trình gia công thống kê kết quả đo: để phát hiện và loại bỏ sai số thô (theo tiêu chuẩn 3σ hoặc Student), ta phải xác định độ lệch bình quân phương (σ) và đối chiếu loại bỏ các giá trị đo vượt quá giới hạn cho phép rồi mới tính lại giá trị trung bình cuối cùng."}, {"id": 28, "code": "3.2.0,2.66", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Phát biểu nào dưới đây mô tả đúng sự khác nhau giữa sai số hệ thống và sai số ngẫu nhiên trong phép đo?", "svg": "", "options": ["a. Sai số hệ thống có xu hướng cố định, còn sai số ngẫu nhiên biến thiên quanh giá trị trung bình", "b. Hai loại sai số hoàn toàn giống nhau", "c. Sai số ngẫu nhiên được loại bỏ bằng mạch bù trôi điểm không", "d. Sai số hệ thống chỉ xuất hiện trong phép đo gián tiếp"], "correct": 0, "explanation": "Sai số hệ thống có giá trị không đổi hoặc biến thiên theo quy luật xác định, còn sai số ngẫu nhiên biến thiên hỗn loạn không theo quy luật quanh giá trị trung bình."}, {"id": 29, "code": "3.2.0,2.67", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Một phép đo điện trở dùng công thức R = U/I. Để giảm sai số tương đối của R hiệu quả hơn, phương án nào dưới đây phù hợp?", "svg": "", "options": ["a. Giảm đồng thời sai số của phép đo U và I", "b. Tăng số đại lượng trung gian", "c. Chọn thiết bị có thang đo lớn nhất có thể", "d. Không cần quan tâm đến sai số của U nếu I đo chính xác"], "correct": 0, "explanation": "Với phép đo gián tiếp R = U / I, sai số tương đối cực đại của R là γ_R = γ_U + γ_I. Do đó để giảm γ_R hiệu quả cần giảm đồng thời cả sai số phép đo điện áp U và dòng điện I."}, {"id": 30, "code": "3.2.0,2.68", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Trong phép đo thống kê, nếu các kết quả đo tạo thành đường cong Gauss hẹp và tập trung hơn quanh giá trị trung bình, nhận xét nào dưới đây là đúng?", "svg": "", "options": ["a. Độ phân tán giảm và phép đo ổn định hơn", "b. Sai số hệ thống tăng", "c. Thang đo bị thu hẹp", "d. Độ nhạy của thiết bị giảm"], "correct": 0, "explanation": "Đường cong phân bố chuẩn Gauss càng hẹp và nhọn (tập trung cao quanh giá trị trung bình) chứng tỏ độ lệch chuẩn σ nhỏ, độ phân tán giảm và phép đo ổn định, chính xác hơn."}, {"id": 31, "code": "3.2.0,2.69", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Một nhiễu điện dung ký sinh xuất hiện giữa dây tín hiệu và môi trường xung quanh. Biện pháp nào dưới đây hiệu quả nhất để hạn chế loại nhiễu này?", "svg": "", "options": ["a. Dùng dây dài hơn để triệt nhiễu", "b. Bọc chống nhiễu bằng màn kim loại và nối đất", "c. Tăng tần số tín hiệu lên nhiều lần", "d. Đổi sang phép đo gián tiếp"], "correct": 1, "explanation": "Nhiễu điện dung ký sinh (nhiễu tĩnh điện / điện trường) được khử hiệu quả nhất bằng cách bọc màn chắn tĩnh điện bằng kim loại dẫn điện tốt (đồng, nhôm) bao quanh dây tín hiệu và nối đất màn chắn."}, {"id": 32, "code": "3.2.0,2.70", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Một thiết bị đo được dùng để đo tín hiệu nhỏ có cấp chính xác nhỏ nhưng thang đo quá rộng. Kết luận nào dưới đây là đúng nhất?", "svg": "", "options": ["a. Cấp chính xác nhỏ đảm bảo sai số tương đối luôn nhỏ", "b. Thang đo quá rộng vẫn có thể làm sai số tương đối của phép đo lớn", "c. Không cần đổi thiết bị nếu cấp chính xác nhỏ", "d. Sai số chỉ phụ thuộc vào người đọc"], "correct": 1, "explanation": "Dù thiết bị có cấp chính xác nhỏ (tốt), nhưng nếu chọn thang đo x_max quá rộng so với tín hiệu nhỏ x (tỷ số x_max / x rất lớn) thì sai số tương đối thực tế của phép đo γ = C% · (x_max / x) vẫn rất lớn."}, {"id": 33, "code": "3.2.0,2.71", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Trong phương pháp bù trôi điểm không bằng mạch điện hiệu chỉnh, việc điều chỉnh để Ub = U0 nhằm mục đích gì?", "svg": "", "options": ["a. Làm tăng công suất tín hiệu đầu ra", "b. Khử thành phần điện áp trôi điểm không để đầu ra chỉ còn phụ thuộc vào đại lượng vật lý cần đo", "c. Mở rộng thang đo đầu vào", "d. Tăng độ trễ của mạch"], "correct": 1, "explanation": "Việc điều chỉnh điện áp bù U_b = U₀ (ngược dấu với điện áp lệch không U₀) nhằm triệt tiêu thành phần điện áp trôi điểm không, giúp tín hiệu đầu ra bằng 0 khi đại lượng đo bằng 0."}, {"id": 34, "code": "3.2.0,2.72", "chapter": 3, "chapterName": "Chương 3: Gia công kết quả đo", "level": 2, "points": 0.2, "question": "Trong xử lý sai số ngẫu nhiên, vì sao việc thực thiện phép đo thống kê lại cho kết quả đáng tin cậy hơn một phép đo đơn lẻ?", "svg": "", "options": ["a. Vì luôn làm sai số hệ thống bằng 0", "b. Vì giúp đánh giá mức phân tán, giá trị trung bình và độ tin cậy của kết quả đo", "c. Vì không cần biết cấp chính xác của thiết bị", "d. Vì cho phép bỏ qua hoàn toàn điều kiện môi trường"], "correct": 1, "explanation": "Phép đo thống kê (đo lặp nhiều lần) giúp ước lượng giá trị thực qua giá trị trung bình cộng, đồng thời đánh giá được mức độ phân tán (σ) và khoảng tin cậy của kết quả đo."}, {"id": 35, "code": "4.3.0,2.61", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Cho mạch khuếch đại không đảo như hình vẽ. Biết hệ số khuếch đại của mạch là 26, R1= 2 kΩ thì giá trị R2 cần chọn là bao nhiêu?", "svg": "<svg viewBox=\"0 0 380 190\" class=\"q-svg\" aria-label=\"Mạch khuếch đại không đảo\">\n      <line x1=\"120\" y1=\"35\" x2=\"175\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"175\" y=\"27\" width=\"46\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"198\" y=\"22\" font-size=\"12\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₂</text>\n      <line x1=\"221\" y1=\"35\" x2=\"275\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"275\" y1=\"35\" x2=\"275\" y2=\"85\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"120\" y1=\"35\" x2=\"120\" y2=\"70\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"120\" y1=\"70\" x2=\"160\" y2=\"70\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <!-- Op-Amp -->\n      <polygon points=\"160,55 160,115 235,85\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"168\" y=\"75\" font-size=\"15\" fill=\"currentColor\" font-weight=\"bold\">−</text>\n      <text x=\"168\" y=\"104\" font-size=\"14\" fill=\"currentColor\" font-weight=\"bold\">+</text>\n      <line x1=\"235\" y1=\"85\" x2=\"310\" y2=\"85\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"275\" cy=\"85\" r=\"3\" fill=\"currentColor\"/>\n      <circle cx=\"310\" cy=\"85\" r=\"3\" fill=\"currentColor\"/>\n      <text x=\"316\" y=\"89\" font-size=\"12\" fill=\"#2563eb\" font-weight=\"bold\">V_out</text>\n      <!-- R1 to ground -->\n      <line x1=\"120\" y1=\"70\" x2=\"120\" y2=\"110\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"120\" cy=\"70\" r=\"3\" fill=\"currentColor\"/>\n      <rect x=\"112\" y=\"110\" width=\"16\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"105\" y=\"132\" font-size=\"12\" fill=\"currentColor\" text-anchor=\"end\" font-weight=\"bold\">R₁</text>\n      <line x1=\"120\" y1=\"146\" x2=\"120\" y2=\"168\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"106\" y1=\"168\" x2=\"134\" y2=\"168\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <!-- U_in -->\n      <line x1=\"70\" y1=\"100\" x2=\"160\" y2=\"100\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"70\" cy=\"100\" r=\"3\" fill=\"currentColor\"/>\n      <text x=\"62\" y=\"104\" font-size=\"12\" fill=\"#dc2626\" text-anchor=\"end\" font-weight=\"bold\">U_in</text>\n    </svg>", "options": ["a. 5 kΩ", "b. 52 kΩ", "c. 25 kΩ", "d. 50 kΩ"], "correct": 3, "explanation": "Mạch khuếch đại không đảo dùng Op-Amp có hệ số khuếch đại: K = 1 + (R₂ / R₁). Thay số: 26 = 1 + (R₂ / 2 kΩ) ⇒ R₂ / 2 = 25 ⇒ R₂ = 50 kΩ."}, {"id": 36, "code": "4.3.0,2.62", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Một mạch khuếch đại đảo có R2/R1 = 200, nguồn nuôi giới hạn điện áp ra bão hòa ở ±12 V. Với Uin = 0,1V, hiện tượng nào xảy ra?", "svg": "<svg viewBox=\"0 0 380 175\" class=\"q-svg\" aria-label=\"Mạch khuếch đại đảo\">\n      <text x=\"45\" y=\"84\" font-size=\"12\" fill=\"#dc2626\" font-weight=\"bold\">U_in</text>\n      <circle cx=\"75\" cy=\"80\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"75\" y1=\"80\" x2=\"95\" y2=\"80\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"95\" y=\"72\" width=\"42\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"116\" y=\"66\" font-size=\"12\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₁</text>\n      <line x1=\"137\" y1=\"80\" x2=\"175\" y2=\"80\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"155\" cy=\"80\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"155\" y1=\"80\" x2=\"155\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"155\" y1=\"35\" x2=\"190\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"190\" y=\"27\" width=\"44\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"212\" y=\"22\" font-size=\"12\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₂</text>\n      <line x1=\"234\" y1=\"35\" x2=\"275\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"275\" y1=\"35\" x2=\"275\" y2=\"95\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <polygon points=\"175,65 175,125 250,95\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"183\" y=\"85\" font-size=\"15\" fill=\"currentColor\" font-weight=\"bold\">−</text>\n      <text x=\"183\" y=\"114\" font-size=\"14\" fill=\"currentColor\" font-weight=\"bold\">+</text>\n      <line x1=\"175\" y1=\"110\" x2=\"150\" y2=\"110\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"150\" y1=\"110\" x2=\"150\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"138\" y1=\"145\" x2=\"162\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <line x1=\"250\" y1=\"95\" x2=\"310\" y2=\"95\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"275\" cy=\"95\" r=\"3\" fill=\"currentColor\"/>\n      <circle cx=\"310\" cy=\"95\" r=\"3\" fill=\"currentColor\"/>\n      <text x=\"316\" y=\"99\" font-size=\"12\" fill=\"#2563eb\" font-weight=\"bold\">V_out</text>\n    </svg>", "options": ["a. Đầu ra bão hòa âm, không đạt -20 V", "b. Đầu ra bằng đúng -20 V", "c. Đầu ra bằng +20 V", "d. Đầu ra bị giới hạn ở -20V"], "correct": 0, "explanation": "Theo lý thuyết tuyến tính: U_out = -(R₂/R₁) · U_in = -200 × 0,1V = -20V. Tuy nhiên nguồn nuôi giới hạn điện áp ra bão hòa ở ±12V nên đầu ra bị rơi vào vùng bão hòa âm (xấp xỉ -12V), không thể đạt tới -20V."}, {"id": 37, "code": "4.3.0,2.63", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Một tín hiệu dòng điện 4-20 mA được đổi sang điện áp 2-10V. Điện trở chuyển đổi tương ứng là bao nhiêu?", "svg": "<svg viewBox=\"0 0 360 175\" class=\"q-svg\" aria-label=\"Mạch chuyển đổi dòng điện 4-20mA sang điện áp 2-10V\">\n      <text x=\"55\" y=\"78\" font-size=\"12\" fill=\"#dc2626\" font-weight=\"bold\">I_in (4-20mA)</text>\n      <line x1=\"135\" y1=\"74\" x2=\"175\" y2=\"74\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"152\" cy=\"74\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"152\" y1=\"74\" x2=\"152\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"152\" y1=\"35\" x2=\"185\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"185\" y=\"27\" width=\"44\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"207\" y=\"22\" font-size=\"12\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R</text>\n      <line x1=\"229\" y1=\"35\" x2=\"268\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"268\" y1=\"35\" x2=\"268\" y2=\"90\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <polygon points=\"175,60 175,120 245,90\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"183\" y=\"79\" font-size=\"15\" fill=\"currentColor\" font-weight=\"bold\">−</text>\n      <text x=\"183\" y=\"109\" font-size=\"14\" fill=\"currentColor\" font-weight=\"bold\">+</text>\n      <line x1=\"175\" y1=\"105\" x2=\"152\" y2=\"105\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"145\" y=\"105\" width=\"14\" height=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"138\" y=\"125\" font-size=\"12\" fill=\"currentColor\" text-anchor=\"end\" font-weight=\"bold\">R</text>\n      <line x1=\"152\" y1=\"137\" x2=\"152\" y2=\"155\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"140\" y1=\"155\" x2=\"164\" y2=\"155\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <line x1=\"245\" y1=\"90\" x2=\"295\" y2=\"90\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"268\" cy=\"90\" r=\"3\" fill=\"currentColor\"/>\n      <text x=\"302\" y=\"94\" font-size=\"12\" fill=\"#2563eb\" font-weight=\"bold\">U_out (2-10V)</text>\n    </svg>", "options": ["a. 50Ω", "b. 250Ω", "c. 100Ω", "d. 500Ω"], "correct": 3, "explanation": "Theo định luật Ohm: R = U / I = ΔU / ΔI. Với I = 4 mA → U = 2 V và I = 20 mA → U = 10 V, ta có R = 2 V / 4 mA = 10 V / 20 mA = 0,5 kΩ = 500 Ω."}, {"id": 38, "code": "4.3.0,2.64", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Một mạch chuyển tín hiệu điện áp sang dòng điện cần tạo dòng 4-20mA tuyến tính từ tín hiệu 1-5V. Hệ số chuyển đổi dòng/áp là bao nhiêu?", "svg": "<svg viewBox=\"0 0 380 185\" class=\"q-svg\" aria-label=\"Mạch chuyển đổi điện áp 1-5V sang dòng điện 4-20mA\">\n      <text x=\"30\" y=\"95\" font-size=\"12\" fill=\"#dc2626\" font-weight=\"bold\">U_in (1-5V)</text>\n      <line x1=\"95\" y1=\"45\" x2=\"120\" y2=\"45\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"120\" y=\"38\" width=\"36\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"138\" y=\"33\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₁</text>\n      <line x1=\"156\" y1=\"45\" x2=\"195\" y2=\"45\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"195\" y=\"38\" width=\"36\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"213\" y=\"33\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₂</text>\n      <line x1=\"231\" y1=\"45\" x2=\"265\" y2=\"45\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"265\" y1=\"45\" x2=\"265\" y2=\"90\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"175\" y1=\"45\" x2=\"175\" y2=\"75\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"175\" y1=\"75\" x2=\"195\" y2=\"75\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <polygon points=\"195,62 195,118 252,90\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"202\" y=\"80\" font-size=\"14\" fill=\"currentColor\" font-weight=\"bold\">−</text>\n      <text x=\"202\" y=\"108\" font-size=\"13\" fill=\"currentColor\" font-weight=\"bold\">+</text>\n      <line x1=\"252\" y1=\"90\" x2=\"285\" y2=\"90\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"278\" y=\"90\" width=\"14\" height=\"30\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"272\" y=\"108\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"end\" font-weight=\"bold\">R₃</text>\n      <line x1=\"285\" y1=\"120\" x2=\"335\" y2=\"120\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"305\" y=\"112\" font-size=\"11\" fill=\"#2563eb\" font-weight=\"bold\">I_out (4-20mA)</text>\n      <rect x=\"328\" y=\"128\" width=\"14\" height=\"30\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"322\" y=\"148\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"end\">R_Load</text>\n    </svg>", "options": ["a. 5 mA/V", "b. 4 mA/V", "c. 16 mA/V", "d. 1 mA/V"], "correct": 1, "explanation": "Hệ số chuyển đổi dòng/áp (độ hỗ dẫn biến đổi tuyến tính): K_UI = ΔI / ΔU = (20 mA - 4 mA) / (5 V - 1 V) = 16 mA / 4 V = 4 mA/V."}, {"id": 39, "code": "4.3.0,2.65", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Một mạch khuếch đại điện áp vi sai có K = 20. Nếu hai tín hiệu vào cùng tăng thêm 0,5V nhưng chênh lệch điện áp ΔU = U₂ - U₁ không đổi, tín hiệu điện áp ra lý tưởng sẽ thế nào?", "svg": "<svg viewBox=\"0 0 380 185\" class=\"q-svg\" aria-label=\"Mạch khuếch đại vi sai\">\n      <text x=\"45\" y=\"69\" font-size=\"12\" fill=\"#dc2626\" font-weight=\"bold\">U₁</text>\n      <circle cx=\"68\" cy=\"65\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"68\" y1=\"65\" x2=\"95\" y2=\"65\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"95\" y=\"58\" width=\"38\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"114\" y=\"53\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₁</text>\n      <line x1=\"133\" y1=\"65\" x2=\"180\" y2=\"65\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"155\" cy=\"65\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"155\" y1=\"65\" x2=\"155\" y2=\"32\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"155\" y1=\"32\" x2=\"185\" y2=\"32\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"185\" y=\"25\" width=\"38\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"204\" y=\"20\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₂</text>\n      <line x1=\"223\" y1=\"32\" x2=\"265\" y2=\"32\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"265\" y1=\"32\" x2=\"265\" y2=\"85\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"45\" y=\"109\" font-size=\"12\" fill=\"#dc2626\" font-weight=\"bold\">U₂</text>\n      <circle cx=\"68\" cy=\"105\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"68\" y1=\"105\" x2=\"95\" y2=\"105\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"95\" y=\"98\" width=\"38\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"114\" y=\"93\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₁</text>\n      <line x1=\"133\" y1=\"105\" x2=\"180\" y2=\"105\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"155\" cy=\"105\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"155\" y1=\"105\" x2=\"155\" y2=\"122\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"148\" y=\"122\" width=\"14\" height=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"142\" y=\"142\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"end\" font-weight=\"bold\">R₂</text>\n      <line x1=\"155\" y1=\"154\" x2=\"155\" y2=\"168\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"143\" y1=\"168\" x2=\"167\" y2=\"168\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <polygon points=\"180,52 180,118 245,85\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"188\" y=\"72\" font-size=\"14\" fill=\"currentColor\" font-weight=\"bold\">−</text>\n      <text x=\"188\" y=\"107\" font-size=\"13\" fill=\"currentColor\" font-weight=\"bold\">+</text>\n      <line x1=\"245\" y1=\"85\" x2=\"305\" y2=\"85\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"265\" cy=\"85\" r=\"3\" fill=\"currentColor\"/>\n      <text x=\"312\" y=\"89\" font-size=\"12\" fill=\"#2563eb\" font-weight=\"bold\">U_out</text>\n    </svg>", "options": ["a. Bằng 0 ngay lập tức", "b. Tăng 10 V", "c. Giảm 10 V", "d. Không đổi"], "correct": 3, "explanation": "Mạch khuếch đại vi sai lý tưởng chỉ khuếch đại hiệu điện áp giữa hai đầu vào: U_out = K · (U₂ - U₁) = K · ΔU (hệ số khuếch đại đồng pha K_c = 0). Khi cả hai đầu vào cùng tăng 0,5V nhưng hiệu ΔU không đổi thì điện áp ra lý tưởng không đổi."}, {"id": 40, "code": "4.2.0,2.66", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 2, "points": 0.2, "question": "Lý do chính cần mạch khuếch đại vi sai có trở kháng đầu vào lớn trong đo lường là gì?", "svg": "", "options": ["a. Chỉ để giảm điện áp nguồn nuôi", "b. Tăng tiêu thụ công suất cảm biến", "c. Làm đầu ra luôn bão hòa", "d. Giảm ảnh hưởng tải lên nguồn tín hiệu/cảm biến"], "correct": 3, "explanation": "Trở kháng đầu vào lớn của mạch khuếch đại vi sai (hoặc khuếch đại đo lường INA) giúp dòng điện trích từ cảm biến gần bằng 0, từ đó giảm tối đa hiệu ứng tải (loading effect) gây sụt áp trên nội trở nguồn tín hiệu/cảm biến."}, {"id": 41, "code": "4.2.0,2.67", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 2, "points": 0.2, "question": "Trong mạch đo, nếu OA có điện trở đầu ra khác không, ảnh hưởng chính là gì khi đầu ra có tải?", "svg": "", "options": ["a. Điện áp ra phụ thuộc tải và gây sai số", "b. Tín hiệu vào luôn bằng 0", "c. Hệ số khuếch đại trở thành vô hạn", "d. Mạch không cần nguồn nuôi"], "correct": 0, "explanation": "Nếu Op-Amp có điện trở đầu ra R_out ≠ 0, khi mắc tải R_L ở đầu ra sẽ tạo thành cầu phân áp R_out và R_L làm điện áp trên tải bị sụt giảm phụ thuộc vào giá trị tải R_L và gây sai số đo."}, {"id": 42, "code": "4.2.0,2.68", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 2, "points": 0.2, "question": "Một cảm biến có hàm truyền logarit. Muốn đầu ra cuối cùng tuyến tính theo đại lượng đo, nên dùng khâu biến đổi nào?", "svg": "", "options": ["a. Chỉ dùng máy biến dòng điện", "b. Chỉ dùng Ampe kế cơ điện", "c. Chỉ dùng cầu đo Wheatstone", "d. Dùng mạch khuếch đại phi tuyến phù hợp"], "correct": 3, "explanation": "Khi cảm biến có đặc tuyến phi tuyến (như hàm logarit), để đầu ra cuối cùng tuyến tính theo đại lượng đo, ta cần mắc nối tiếp một khâu khuếch đại phi tuyến có hàm truyền ngược (hàm mũ/đối logarit) để bù tuyến tính hóa."}, {"id": 43, "code": "4.3.0,2.69", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Mạch khuếch đại đảo có R1 = 1kΩ, R2 = 100kΩ, Uin = 0,2V và nguồn nuôi giới hạn điện áp ra bão hòa ở ±13 V. Giá trị đầu ra thực tế phù hợp nhất là bao nhiêu?", "svg": "<svg viewBox=\"0 0 380 175\" class=\"q-svg\" aria-label=\"Mạch khuếch đại đảo bão hòa\">\n      <text x=\"35\" y=\"84\" font-size=\"12\" fill=\"#dc2626\" font-weight=\"bold\">U_in=0,2V</text>\n      <line x1=\"100\" y1=\"80\" x2=\"115\" y2=\"80\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"115\" y=\"72\" width=\"42\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"136\" y=\"66\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₁=1kΩ</text>\n      <line x1=\"157\" y1=\"80\" x2=\"185\" y2=\"80\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"168\" cy=\"80\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"168\" y1=\"80\" x2=\"168\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"168\" y1=\"35\" x2=\"195\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"195\" y=\"27\" width=\"48\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"219\" y=\"21\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₂=100kΩ</text>\n      <line x1=\"243\" y1=\"35\" x2=\"278\" y2=\"35\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"278\" y1=\"35\" x2=\"278\" y2=\"95\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <polygon points=\"185,65 185,125 255,95\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"193\" y=\"85\" font-size=\"15\" fill=\"currentColor\" font-weight=\"bold\">−</text>\n      <text x=\"193\" y=\"114\" font-size=\"14\" fill=\"currentColor\" font-weight=\"bold\">+</text>\n      <line x1=\"185\" y1=\"110\" x2=\"162\" y2=\"110\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"162\" y1=\"110\" x2=\"162\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"150\" y1=\"145\" x2=\"174\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <line x1=\"255\" y1=\"95\" x2=\"305\" y2=\"95\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"278\" cy=\"95\" r=\"3\" fill=\"currentColor\"/>\n      <text x=\"310\" y=\"99\" font-size=\"11\" fill=\"#2563eb\" font-weight=\"bold\">V_out (±13V)</text>\n    </svg>", "options": ["a. Xấp xỉ -13V do bão hòa", "b. -20V tuyến tính", "c. +20V tuyến tính", "d. 0V do ngắn mạch ảo"], "correct": 0, "explanation": "Theo công thức mạch khuếch đại đảo tuyến tính: U_out(lt) = -(R₂ / R₁) · U_in = -(100 kΩ / 1 kΩ) × 0,2V = -20V. Vì điện áp bão hòa của Op-Amp bị giới hạn ở ±13V nên đầu ra thực tế bị ghim ở mức bão hòa âm xấp xỉ -13V."}, {"id": 44, "code": "4.3.0,2.70", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Một mạch đo dòng cần chuyển tín hiệu 0-10V thành 0-20mA. Nếu dùng quan hệ tuyến tính I = U/R, điện trở tương đương cần chọn là bao nhiêu?", "svg": "", "options": ["a. 50 Ω", "b. 250 Ω", "c. 1 kΩ", "d. 500 Ω"], "correct": 3, "explanation": "Áp dụng quan hệ tuyến tính R = U_max / I_max = 10 V / 20 mA = 10 / 0,02 = 500 Ω."}, {"id": 45, "code": "4.3.0,2.71", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Một hệ đo lường nhận tín hiệu chuẩn 4–20mA từ cảm biến và chuyển thành điện áp qua điện trở 250 Ω. Khi cảm biến ở 50% dải đo, điện áp vào bộ đo bằng bao nhiêu?", "svg": "", "options": ["a. 2 V", "b. 3 V", "c. 4 V", "d. 5 V"], "correct": 1, "explanation": "Dải dòng chuẩn 4–20 mA có độ rộng dải là 20 - 4 = 16 mA. Tại 50% dải đo, dòng điện đầu ra của cảm biến là: I = 4 mA + 50% × 16 mA = 12 mA. Điện áp rơi trên điện trở 250 Ω là: U = I × R = 12 mA × 250 Ω = 0,012 × 250 = 3 V."}, {"id": 46, "code": "4.3.0,2.72", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Trong mạch khuếch đại vi sai, nếu các điện trở ở hai nhánh không được chọn đúng theo tỷ lệ R2/R1, loại sai số nào dễ tăng nhất?", "svg": "", "options": ["a. Sai số do khử nhiễu chế độ chung kém", "b. Sai số do không có dòng điện một chiều", "c. Sai số do điện trở dây bằng 0", "d. Sai số do tần số bằng 0"], "correct": 0, "explanation": "Trong mạch khuếch đại vi sai, điều kiện cân bằng hai nhánh R₂/R₁ = R₄/R₃ giúp triệt tiêu tín hiệu đồng pha. Nếu tỷ lệ điện trở hai nhánh bị lệch, tỷ số nén tín hiệu đồng pha (CMRR) giảm mạnh, làm tăng sai số do khử nhiễu chế độ chung kém."}, {"id": 47, "code": "4.3.0,2.73", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Khi thiết kế khâu khuếch đại cho tín hiệu cảm biến có biên độ rất nhỏ. Để tín hiệu đầu ra chính xác và ổn định thì yếu tố nào cần ưu tiên ngoài hệ số khuếch đại?", "svg": "", "options": ["a. Nhiễu, trở kháng vào, bão hòa và độ tuyến tính", "b. Chỉ màu vỏ IC", "c. Chỉ kích thước dây nguồn", "d. Chỉ số vòng quay công tơ"], "correct": 0, "explanation": "Khi khuếch đại tín hiệu cảm biến biên độ rất nhỏ (mức µV, mV), ngoài hệ số khuếch đại K, người thiết kế phải ưu tiên chống nhiễu (CMRR cao, nhiễu nội thấp), trở kháng vào lớn, tránh bão hòa Op-Amp và đảm bảo độ tuyến tính."}, {"id": 48, "code": "4.3.0,2.74", "chapter": 4, "chapterName": "Chương 4: Các mạch xử lý tín hiệu đo cơ bản", "level": 3, "points": 0.2, "question": "Một hệ đo dùng điện trở 250Ω để chuyển tín hiệu dòng thành điện áp, sau đó tín hiệu được khuếch đại qua mạch khuếch đại không đảo có hệ số K = 2. Khi dòng điện đầu vào là 8 mA, điện áp ra sau khuếch đại là bao nhiêu?", "svg": "", "options": ["a. 8 V", "b. 2 V", "c. 1 V", "d. 4 V"], "correct": 3, "explanation": "Điện áp sau điện trở chuyển đổi R = 250 Ω là: U₁ = I × R = 8 mA × 250 Ω = 2 V. Qua mạch khuếch đại không đảo hệ số K = 2, điện áp đầu ra là: U_ra = K × U₁ = 2 × 2 V = 4 V."}, {"id": 49, "code": "5.2.0,2.49", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Trong chuyển đổi biến trở dạng thẳng, vì sao quan hệ Rx theo vị trí thực tế có dạng bậc thang?", "svg": "", "options": ["a. Vì con chạy phải dịch chuyển qua từng vòng dây quấn thì điện trở mới thay đổi", "b. Vì điện trở luôn bằng không", "c. Vì nguồn nuôi là xoay chiều", "d. Vì cảm biến không cần mạch đo"], "correct": 0, "explanation": "Trong biến trở dây quấn dạng thẳng, dây điện trở được quấn thành từng vòng rời rạc. Khi con chạy trượt từ vòng dây này sang vòng dây kế tiếp, điện trở thay đổi nhảy bậc theo từng vòng dây nên đặc tính thực tế có dạng bậc thang."}, {"id": 50, "code": "5.3.0,2.50", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 3, "points": 0.2, "question": "Cho biến trở tuyến tính có R = 20kΩ, chiều dài 200mm. Khi con chạy tại 75 mm thì điện trở ra lý tưởng là bao nhiêu?", "svg": "", "options": ["a. 2kΩ", "b. 15 kΩ", "c. 5 kΩ", "d. 7,5 kΩ"], "correct": 3, "explanation": "Biến trở tuyến tính có điện trở tỷ lệ thuận với vị trí con chạy: R_x = R · (x / L) = 20 kΩ × (75 mm / 200 mm) = 20 × 0,375 = 7,5 kΩ."}, {"id": 51, "code": "5.3.0,2.51", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 3, "points": 0.2, "question": "Cho biến trở dạng xoay có R = 12kΩ, góc quay lớn nhất 270°. Tại góc 90°, điện trở ra lý tưởng là bao nhiêu?", "svg": "", "options": ["a. 6 kΩ", "b. 4 kΩ", "c. 8 kΩ", "d. 12 kΩ"], "correct": 1, "explanation": "Với biến trở xoay tuyến tính: R_x = R · (α / α_max) = 12 kΩ × (90° / 270°) = 12 kΩ × (1/3) = 4 kΩ."}, {"id": 52, "code": "5.3.0,2.52", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 3, "points": 0.2, "question": "Một mạch phân áp dùng biến trở 10kΩ cấp nguồn 10V, con chạy ở giữa, tải phía sau có điện trở vào rất lớn. Điện áp ra lý tưởng là bao nhiêu?", "svg": "<svg viewBox=\"0 0 360 180\" class=\"q-svg\" aria-label=\"Mạch phân áp dùng biến trở\">\n      <line x1=\"80\" y1=\"30\" x2=\"180\" y2=\"30\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"80\" y1=\"30\" x2=\"80\" y2=\"82\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"66\" y1=\"82\" x2=\"94\" y2=\"82\" stroke=\"currentColor\" stroke-width=\"2.2\"/>\n      <line x1=\"72\" y1=\"90\" x2=\"88\" y2=\"90\" stroke=\"currentColor\" stroke-width=\"2.2\"/>\n      <text x=\"58\" y=\"90\" font-size=\"12\" fill=\"#dc2626\" text-anchor=\"end\" font-weight=\"bold\">E_N = 10V</text>\n      <line x1=\"80\" y1=\"90\" x2=\"80\" y2=\"150\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"80\" y1=\"150\" x2=\"290\" y2=\"150\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"180\" y1=\"30\" x2=\"180\" y2=\"60\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"171\" y=\"60\" width=\"18\" height=\"60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"163\" y=\"95\" font-size=\"12\" fill=\"currentColor\" text-anchor=\"end\" font-weight=\"bold\">R = 10kΩ</text>\n      <line x1=\"180\" y1=\"120\" x2=\"180\" y2=\"150\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <!-- Wiper at middle -->\n      <line x1=\"255\" y1=\"90\" x2=\"192\" y2=\"90\" stroke=\"#2563eb\" stroke-width=\"2\"/>\n      <polygon points=\"190,90 198,85 198,95\" fill=\"#2563eb\"/>\n      <line x1=\"255\" y1=\"90\" x2=\"255\" y2=\"105\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n      <rect x=\"247\" y=\"105\" width=\"16\" height=\"30\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n      <text x=\"241\" y=\"125\" font-size=\"11\" fill=\"#2563eb\" text-anchor=\"end\" font-weight=\"bold\">R_V</text>\n      <line x1=\"255\" y1=\"135\" x2=\"255\" y2=\"150\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n      <rect x=\"218\" y=\"68\" width=\"90\" height=\"90\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-dasharray=\"4,3\"/>\n      <text x=\"263\" y=\"62\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\">Mạch đo áp</text>\n      <text x=\"275\" y=\"125\" font-size=\"12\" fill=\"#2563eb\" font-weight=\"bold\">U_ra</text>\n    </svg>", "options": ["a. 0 V", "b. 10 V", "c. 2,5 V", "d. 5 V"], "correct": 3, "explanation": "Khi con chạy ở chính giữa (x/L = 0,5) và tải phía sau có điện trở vào rất lớn (R_V → ∞, không gây sụt áp tải), mạch phân áp cho điện áp ra lý tưởng: U_ra = E_N × 0,5 = 10 V × 0,5 = 5 V."}, {"id": 53, "code": "5.2.0,2.53", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Cho mạch phân áp sử dụng chuyển đổi biến trở R, nếu điện trở vào của mạch nhỏ hơn rất nhiều so với điện trở của biến trở, hiện tượng nào xảy ra rõ nhất?", "svg": "", "options": ["a. Quan hệ giữa điện áp đầu ra và vị trí con chạy bị sai lệch", "b. Độ tuyến tính lý tưởng tăng tuyệt đối", "c. Dòng điện trong biến trở bằng 0", "d. Điện trở toàn phần mất tác dụng"], "correct": 0, "explanation": "Nếu điện trở vào của mạch đo R_V nhỏ hơn nhiều so với điện trở biến trở R, nhánh R_V mắc song song với phần dưới của biến trở sẽ hút dòng lớn (hiệu ứng tải), làm méo phi tuyến mạnh quan hệ giữa điện áp ra U_ra và vị trí con chạy x."}, {"id": 54, "code": "5.3.0,2.54", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 3, "points": 0.2, "question": "Một cảm biến có điện áp đầu ra thay đổi tuyến tính từ 1V đến 5V khi đại lượng đo thay đổi từ 0 đến 100 kPa. Độ nhạy của cảm biến là bao nhiêu?", "svg": "", "options": ["a. 0,4 V/kPa", "b. 4 V/kPa", "c. 25 V/kPa", "d. 0,04 V/kPa"], "correct": 3, "explanation": "Độ nhạy của cảm biến tuyến tính: S = ΔU / ΔP = (5 V - 1 V) / (100 kPa - 0 kPa) = 4 V / 100 kPa = 0,04 V/kPa."}, {"id": 55, "code": "5.3.0,2.55", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 3, "points": 0.2, "question": "Một nhiệt điện trở kim loại có R = 100Ω tại 0°C và tăng 0,385Ω/°C. Ở 100°C, điện trở bằng bao nhiêu?", "svg": "", "options": ["a. 385Ω", "b. 100,385Ω", "c. 138,5Ω", "d. 61,5Ω"], "correct": 2, "explanation": "Đây là cảm biến nhiệt điện trở Pt100: R(t) = R₀ + ΔR = 100 Ω + 0,385 Ω/°C × 100°C = 100 + 38,5 = 138,5 Ω."}, {"id": 56, "code": "5.2.0,2.56", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Một cảm biến có đầu ra phụ thuộc cả áp suất cần đo và nhiệt độ môi trường. Nhiệt độ môi trường trong mô hình cảm biến được xem là đại lượng gì?", "svg": "", "options": ["a. Đầu vào phụ gây ảnh hưởng", "b. Đại lượng đo chính duy nhất", "c. Tín hiệu chuẩn tuyệt đối", "d. Điện trở tải"], "correct": 0, "explanation": "Trong mô hình cảm biến đo áp suất, áp suất là đại lượng đo chính (đầu vào mong muốn), còn nhiệt độ môi trường làm thay đổi thông số cảm biến được gọi là đại lượng ảnh hưởng hay đầu vào phụ gây nhiễu."}, {"id": 57, "code": "5.2.0,2.57", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Một cảm biến chủ động có ưu điểm nào sau đây so với cảm biến thụ động?", "svg": "", "options": ["a. Không cần nguồn kích thích ngoài cho nguyên lý chuyển đổi chính", "b. Không bao giờ có sai số", "c. Không cần mạch xử lý", "d. Luôn có đầu ra số"], "correct": 0, "explanation": "Cảm biến chủ động (Active/Self-generating sensor, như cặp nhiệt điện, áp điện, quang điện phát xạ) tự sinh ra tín hiệu điện (sức điện động/điện tích) từ năng lượng đại lượng đo mà không cần nguồn kích thích ngoài cho nguyên lý chuyển đổi chính."}, {"id": 58, "code": "5.2.0,2.58", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Muốn giảm ảnh hưởng của tải trong mạch đo sử dụng chuyển dổi biến trở, nên chọn mạch đo có đặc điểm nào?", "svg": "", "options": ["a. Điện trở vào rất nhỏ", "b. Điện trở vào lớn", "c. Ngắn mạch đầu ra", "d. Không nối đất nguồn"], "correct": 1, "explanation": "Để giảm sai số hiệu ứng tải trong mạch phân áp dùng biến trở, mạch đo phía sau phải có điện trở vào rất lớn so với điện trở toàn phần của biến trở (R_V ≫ R)."}, {"id": 59, "code": "5.3.0,2.59", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 3, "points": 0.2, "question": "Một biến trở 5kΩ được mắc trong mạch phân áp có nguồn 10V, con chạy đặt tại vị trí 20% hành trình (tính từ đầu thấp của biến trở). Giả sử Volt kế có điện trở rất lớn thì điện áp ra bằng bao nhiêu?", "svg": "", "options": ["a. 8 V", "b. 5 V", "c. 2 V", "d. 10 V"], "correct": 2, "explanation": "Vì Volt kế có điện trở rất lớn (không gây tải), điện áp ra tỷ lệ tuyến tính với phần trăm hành trình con chạy: U_ra = U_nguồn × 20% = 10 V × 0,2 = 2 V."}, {"id": 60, "code": "5.2.0,2.60", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Một cảm biến có quan hệ vào ra phi tuyến nhưng hệ đo yêu cầu kết quả tuyến tính. Giải pháp phù hợp là gì?", "svg": "", "options": ["a. Bỏ qua hoàn toàn sai số", "b. Dùng mạch tuyến tính hóa hoặc xử lý hiệu chỉnh đặc tuyến", "c. Giảm số bit hiển thị", "d. Dùng dây dẫn dài hơn"], "correct": 1, "explanation": "Khi cảm biến có đặc tính vào–ra phi tuyến nhưng hệ đo yêu cầu đầu ra tuyến tính, giải pháp chuẩn là sử dụng mạch tuyến tính hóa (như cầu đo, mạch khuếch đại loga/hàm ngược) hoặc thuật toán hiệu chỉnh đặc tuyến (bảng tra LUT / đa thức nội suy trong vi xử lý)."}, {"id": 61, "code": "5.2.0,2.61", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Trong cảm biến điện trở lực căng, đại lượng cơ học làm thay đổi điện trở thông qua cơ chế nào?", "svg": "", "options": ["a. Tăng tần số nguồn chuẩn", "b. Biến dạng làm thay đổi chiều dài/tiết diện điện trở", "c. Tạo sóng siêu âm phản xạ", "d. Đổi số bit ADC"], "correct": 1, "explanation": "Cảm biến điện trở lực căng (Strain gauge / Tenzo) hoạt động dựa trên hiệu ứng áp trở và biến dạng hình học: lực cơ học gây biến dạng kéo/nén làm thay đổi chiều dài l, tiết diện S và điện trở suất ρ theo công thức R = ρ·l/S."}, {"id": 62, "code": "5.3.0,2.62", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 3, "points": 0.2, "question": "Một cảm biến có độ nhạy 40 mV/kPa và nhiễu đầu ra 20 mV. Độ biến thiên áp suất nhỏ nhất có thể nhận biết là bao nhiêu?", "svg": "", "options": ["a. 0,5 kPa", "b. 2 kPa", "c. 40 kPa", "d. 20 kPa"], "correct": 0, "explanation": "Ngưỡng nhạy (độ biến thiên áp suất nhỏ nhất có thể nhận biết được trên nền nhiễu) là: ΔP_min = U_nhiễu / S = 20 mV / (40 mV/kPa) = 0,5 kPa."}, {"id": 63, "code": "5.2.0,2.63", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Cho mạch đo khối lượng dùng chuyển đổi Tenzo như hình vẽ. Hãy cho biết phương trình điện áp ra trên đường chéo của mạch cầu?", "svg": "<svg viewBox=\"0 0 400 185\" class=\"q-svg\" aria-label=\"Cầu đo 4 cảm biến Tenzo và khuếch đại\">\n      <line x1=\"55\" y1=\"25\" x2=\"165\" y2=\"25\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <line x1=\"55\" y1=\"25\" x2=\"55\" y2=\"82\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <text x=\"48\" y=\"92\" font-size=\"12\" fill=\"#dc2626\" text-anchor=\"end\" font-weight=\"bold\">E_n</text>\n      <line x1=\"55\" y1=\"98\" x2=\"55\" y2=\"160\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <line x1=\"55\" y1=\"160\" x2=\"165\" y2=\"160\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <!-- Bridge -->\n      <line x1=\"95\" y1=\"60\" x2=\"95\" y2=\"125\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <line x1=\"235\" y1=\"60\" x2=\"235\" y2=\"125\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <line x1=\"95\" y1=\"60\" x2=\"120\" y2=\"60\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <rect x=\"120\" y=\"53\" width=\"34\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"137\" y=\"47\" font-size=\"10\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₁=R₀+ΔR</text>\n      <line x1=\"154\" y1=\"60\" x2=\"176\" y2=\"60\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <circle cx=\"165\" cy=\"60\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"165\" y1=\"25\" x2=\"165\" y2=\"60\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <rect x=\"176\" y=\"53\" width=\"34\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"193\" y=\"47\" font-size=\"10\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₂=R₀−ΔR</text>\n      <line x1=\"210\" y1=\"60\" x2=\"235\" y2=\"60\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <!-- Lower arms -->\n      <line x1=\"95\" y1=\"125\" x2=\"120\" y2=\"125\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <rect x=\"120\" y=\"118\" width=\"34\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"137\" y=\"146\" font-size=\"10\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₄=R₀−ΔR</text>\n      <line x1=\"154\" y1=\"125\" x2=\"176\" y2=\"125\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <circle cx=\"165\" cy=\"125\" r=\"3\" fill=\"currentColor\"/>\n      <line x1=\"165\" y1=\"125\" x2=\"165\" y2=\"160\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <rect x=\"176\" y=\"118\" width=\"34\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"193\" y=\"146\" font-size=\"10\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₃=R₀+ΔR</text>\n      <line x1=\"210\" y1=\"125\" x2=\"235\" y2=\"125\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <!-- Output Um to Amplifier -->\n      <line x1=\"95\" y1=\"92\" x2=\"285\" y2=\"80\" stroke=\"#2563eb\" stroke-width=\"1.4\" stroke-dasharray=\"3,2\"/>\n      <line x1=\"235\" y1=\"92\" x2=\"285\" y2=\"104\" stroke=\"#2563eb\" stroke-width=\"1.4\" stroke-dasharray=\"3,2\"/>\n      <polygon points=\"285,68 285,116 340,92\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2\"/>\n      <text x=\"292\" y=\"85\" font-size=\"13\" fill=\"#2563eb\" font-weight=\"bold\">−</text>\n      <text x=\"292\" y=\"109\" font-size=\"12\" fill=\"#2563eb\" font-weight=\"bold\">+</text>\n      <text x=\"312\" y=\"132\" font-size=\"10\" fill=\"#2563eb\" text-anchor=\"middle\">Khuếch đại (K_kd)</text>\n      <line x1=\"340\" y1=\"92\" x2=\"365\" y2=\"92\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n      <text x=\"368\" y=\"96\" font-size=\"12\" fill=\"#2563eb\" font-weight=\"bold\">U_ra</text>\n    </svg>", "options": ["a. U_ra = - K_kd · E_n · (ΔR / R₀)", "b. U_ra = - K_kd · E_n · (ΔR / 4R₀)", "c. U_ra = - K_kd · E_n · (ΔR / 2R₀)", "d. U_ra = K_kd · E_n · (ΔR / R₀)"], "correct": 0, "explanation": "Mạch cầu Wheatstone có cả 4 nhánh tích cực (R₁ = R₃ = R₀ + ΔR; R₂ = R₄ = R₀ - ΔR) cho điện áp đường chéo cầu U_m = E_n · (4ΔR / 4R₀) = E_n · (ΔR / R₀). Đưa vào bộ khuếch đại đảo hệ số K_kd (cực dương cầu nối vào đầu đảo −), điện áp ra là: U_ra = - K_kd · E_n · (ΔR / R₀)."}, {"id": 64, "code": "5.2.0,2.64", "chapter": 5, "chapterName": "Chương 5: Cảm biến sơ cấp", "level": 2, "points": 0.2, "question": "Một cảm biến đo độ bóng của bề mặt sử dụng chuyển đổi điện cảm như hình vẽ. Khi khoảng cách x giữa đầu dò và bề mặt thay đổi, tham số điện nào của phần tử chuyển đổi thay đổi theo?", "svg": "<svg viewBox=\"0 0 380 150\" class=\"q-svg\" aria-label=\"Cảm biến đo độ bóng bề mặt dùng chuyển đổi điện cảm\">\n      <!-- Wavy surface -->\n      <path d=\"M 30 110 Q 45 100 60 110 T 90 110 T 120 110 T 150 110\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"90\" y=\"132\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\">Bề mặt chi tiết</text>\n      <!-- Probe & spring -->\n      <circle cx=\"90\" cy=\"105\" r=\"4\" fill=\"#dc2626\"/>\n      <line x1=\"90\" y1=\"45\" x2=\"90\" y2=\"101\" stroke=\"#dc2626\" stroke-width=\"2\"/>\n      <text x=\"72\" y=\"82\" font-size=\"14\" fill=\"#dc2626\" font-weight=\"bold\">x</text>\n      <!-- Armature & Core -->\n      <line x1=\"90\" y1=\"65\" x2=\"195\" y2=\"65\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <rect x=\"170\" y=\"72\" width=\"50\" height=\"8\" fill=\"#64748b\"/>\n      <path d=\"M 165 86 L 165 112 L 225 112 L 225 86\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"6\"/>\n      <!-- Coil winding -->\n      <path d=\"M 180 106 C 183 96 187 96 190 106 C 193 96 197 96 200 106 C 203 96 207 96 210 106\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2\"/>\n      <line x1=\"210\" y1=\"106\" x2=\"250\" y2=\"106\" stroke=\"#2563eb\" stroke-width=\"1.6\"/>\n      <rect x=\"250\" y=\"82\" width=\"52\" height=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"276\" y=\"102\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\">Mạch</text>\n      <text x=\"276\" y=\"116\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\">đo</text>\n      <rect x=\"315\" y=\"82\" width=\"52\" height=\"44\" fill=\"#1e293b\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"341\" y=\"75\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\">Chỉ thị</text>\n    </svg>", "options": ["A. Điện trở R", "B. Điện cảm L", "C. Điện dung C", "D. Điện dẫn G"], "correct": 1, "explanation": "Trong chuyển đổi điện cảm đo độ bóng/nhám bề mặt, khi đầu dò dịch chuyển làm khe hở không khí δ (khoảng cách x) của mạch từ thay đổi ⇒ từ trở R_m thay đổi ⇒ Điện cảm L của cuộn dây (L = W² / R_m) thay đổi theo."}, {"id": 65, "code": "6.3.0,2.48", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Một nguồn điện 10VDC cấp cho phụ tải 100Ω. Khi chưa mắc ampe kế, dòng điện trong mạch là 0,1 A. Nếu mắc thêm ampe kế có điện trở trong RA = 1 Ω nối tiếp với tải, dòng điện đo được bằng bao nhiêu?", "svg": "", "options": ["a. 0,099 A", "b. 0,1 A", "c. 0,01 A", "d. 1 A"], "correct": 0, "explanation": "Khi mắc nối tiếp Ampe kế có R_A = 1 Ω với tải R_t = 100 Ω vào nguồn U = 10 VDC, tổng trở mạch là R_t + R_A = 101 Ω. Dòng điện đo được là: I_A = U / (R_t + R_A) = 10 / (100 + 1) = 10 / 101 ≈ 0,099 A."}, {"id": 66, "code": "6.3.0,2.49", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Một tải 100 Ω được đo bằng ampe kế có điện trở trong RA = 1Ω, sai số phụ của phép đo do điện trở trong RA của Ampe kế gây ra bằng bao nhiêu?", "svg": "", "options": ["a. 0,99%", "b. 10%", "c. 100%", "d. 101%"], "correct": 0, "explanation": "Sai số tương đối phụ do nội trở Ampe kế R_A gây ra khi đo dòng qua tải R_t (với nguồn áp lý tưởng): |γ_I| = R_A / (R_t + R_A) × 100% = 1 / (100 + 1) × 100% ≈ 0,99% (hoặc R_A / R_t = 1% ≈ 0,99%)."}, {"id": 67, "code": "6.3.0,2.50", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Một Volt kế có điện trở trong RV = 100kΩ đo điện áp trên tải Rx = 10 kΩ, nguồn có RN = 1kΩ. Điện trở tương đương của RN và Rx trong công thức sai số phụ khoảng bao nhiêu?", "svg": "", "options": ["a. 9,09 kΩ", "b. 11 kΩ", "c. 0,909 kΩ", "d. 100 kΩ"], "correct": 2, "explanation": "Theo định lý Thevenin nhìn từ hai đầu tải R_x (khi triệt tiêu nguồn áp độc lập), điện trở tương đương của mạch gồm R_N mắc song song với R_x: R_tđ = (R_N · R_x) / (R_N + R_x) = (1 kΩ × 10 kΩ) / (1 kΩ + 10 kΩ) = 10 / 11 ≈ 0,909 kΩ."}, {"id": 68, "code": "6.2.0,2.51", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 2, "points": 0.2, "question": "Vôn kế có điện trở trong RV càng lớn so với điện trở tương đương nhìn từ hai đầu đo. Sai số phụ sẽ ảnh hưởng thế nào?", "svg": "", "options": ["a. Càng nhỏ", "b. Càng lớn", "c. Không đổi", "d. Luôn bằng 100%"], "correct": 0, "explanation": "Sai số phụ khi đo điện áp bằng Vôn kế có công thức |γ_U| = R_tđ / (R_tđ + R_V). Do đó khi điện trở trong R_V càng lớn so với R_tđ thì dòng rẽ qua Vôn kế càng nhỏ và sai số phụ càng nhỏ."}, {"id": 69, "code": "6.3.0,2.52", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Một cơ cấu đo có dòng toàn thang đo là 1mA, điện trở trong 100Ω. Muốn mở rộng thang đo để đo được dòng điện tối đa 10mA thì cần giá trị điện trở Shunt lý tưởng là bao nhiêu?", "svg": "", "options": ["a. 11,1 Ω", "b. 100 Ω", "c. 900 Ω", "d. 1 kΩ"], "correct": 0, "explanation": "Hệ số mở rộng thang đo dòng: n = I / I_cc = 10 mA / 1 mA = 10. Điện trở Shunt mắc song song là: R_sh = R_cc / (n - 1) = 100 Ω / (10 - 1) = 100 / 9 ≈ 11,1 Ω."}, {"id": 70, "code": "6.3.0,2.53", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Một cơ cấu đo có dòng toàn thang đo là 1mA, điện trở trong 100Ω Muốn sử dụng cơ cấu này để làm vôn kế có thang đo 10V thì tổng điện trở cần có là bao nhiêu?", "svg": "", "options": ["a. 100 kΩ", "b. 1 kΩ", "c. 10 Ω", "d. 10 kΩ (Đề gốc in nhầm thành 100 kΩ)"], "correct": 3, "explanation": "Tổng điện trở của Vôn kế (R_V = R_cc + R_p) cần có để đo thang U = 10 V với dòng toàn thang I_cc = 1 mA là: R_V = U / I_cc = 10 V / 1 mA = 10 kΩ. (Lưu ý: Trong tệp .docx gốc của trường, phương án d bị gõ nhầm thành 100 kΩ trùng với a, giá trị đúng theo câu 6.3.0,2.54 kế tiếp là 10 kΩ)."}, {"id": 71, "code": "6.3.0,2.54", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Một cơ cấu đo có dòng toàn thang đo là 1mA, điện trở trong 100Ω Muốn sử dụng cơ cấu này để chế tạo volt kế có thang đo 10V cần mắc thêm một điện trở phụ nối tiếp có giá trị bao nhiêu?", "svg": "", "options": ["a. 1kΩ", "b. 10 kΩ", "c. 100 Ω", "d. 9,9 kΩ"], "correct": 3, "explanation": "Tổng trở Vôn kế cần có là R_V = U / I_cc = 10 V / 1 mA = 10 kΩ = 10.000 Ω. Điện trở phụ cần mắc nối tiếp với cơ cấu đo là: R_p = R_V - R_cc = 10.000 Ω - 100 Ω = 9.900 Ω = 9,9 kΩ."}, {"id": 72, "code": "6.2.0,2.55", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 2, "points": 0.2, "question": "Khi sử dụng máy biến dòng trong đo lường, điều nào cần tránh để đảm bảo an toàn?", "svg": "", "options": ["a. Nối đất vỏ thiết bị", "b. Ngắn mạch phía thứ cấp có kiểm soát, khi không đo", "c. Mắc ampe kế vào thứ cấp máy biến dòng", "d. Hở mạch phía thứ cấp khi phía sơ cấp đang có dòng diện"], "correct": 3, "explanation": "Khi máy biến dòng (TI / CT) đang có dòng điện sơ cấp chạy qua, tuyệt đối KHÔNG ĐƯỢC để hở mạch phía thứ cấp vì từ thông lõi thép sẽ tăng đột biến làm bão hòa mạch từ, cảm ứng điện áp cao hàng nghìn Volt ở thứ cấp gây nguy hiểm tính mạng và cháy hỏng cách điện."}, {"id": 73, "code": "6.2.0,2.56", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 2, "points": 0.2, "question": "Một tín hiệu dòng điện xoay chiều được đo bằng thiết bị hoạt động ngoài dải tần số cho phép. Sai số khi đo có thể gồm những thành phần nào?", "svg": "", "options": ["a. Sai lệch độ nhạy biên độ và sai lệch góc pha", "b. Chỉ sai số do nhiệt điện trở", "c. Chỉ sai số cầu Wheatstone", "d. Không có sai số nếu kim vẫn quay"], "correct": 0, "explanation": "Khi đo tín hiệu xoay chiều ngoài dải tần số định mức của thiết bị, điện kháng (X_L = ωL, X_C = 1/ωC), tổn hao dòng xoáy và quán tính làm thay đổi cả độ nhạy biên độ lẫn góc lệch pha của thiết bị đo."}, {"id": 74, "code": "6.2.0,2.57", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 2, "points": 0.2, "question": "Tổn hao công suất trên Ampe kế khi đo dòng điện I được xác định chủ yếu bởi công thức nào?", "svg": "", "options": ["a. P = I².R_A", "b. P = U/RV", "c. P = f/T", "d. P = C/L"], "correct": 0, "explanation": "Ampe kế có điện trở trong R_A và có dòng điện cần đo I đi qua trực tiếp, nên công suất tiêu thụ (tổn hao) trên Ampe kế được tính theo định luật Joule-Lenz: P = I² · R_A."}, {"id": 75, "code": "6.3.0,2.58", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Một ampe kế có điện trở trong RA = 1Ω, cấp chính xác 1% dùng đo tải. Để sai số phụ do RA không vượt quá 1% thì phụ tải cần có điện trở tối thiểu là bao nhiêu?", "svg": "", "options": ["a.  1Ω", "b. 99 Ω", "c. 10 Ω", "d. 0,01 Ω"], "correct": 1, "explanation": "Sai số phụ do nội trở Ampe kế: γ_phụ = R_A / (R_t + R_A) ≤ 1% = 0,01 ⇒ 1 / (R_t + 1) ≤ 0,01 ⇒ R_t + 1 ≥ 100 ⇒ R_t ≥ 99 Ω."}, {"id": 76, "code": "6.3.0,2.59", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Một nguồn điện 12V cấp cho phụ tải 120Ω. Khi mắc thêm Ampe kế có điện trở trong RA = 2 Ω nối tiếp với tải. Hãy xác định dòng điện đo được của toàn mạch?", "svg": "", "options": ["a. 6A", "b. 0,1A", "c. 0,12A", "d. 0,0984A"], "correct": 3, "explanation": "Khi mắc thêm Ampe kế R_A = 2 Ω nối tiếp với phụ tải R_t = 120 Ω vào nguồn U = 12 V, dòng điện thực tế chạy trong mạch mà Ampe kế đo được là: I = U / (R_t + R_A) = 12 / (120 + 2) = 12 / 122 ≈ 0,0984 A."}, {"id": 77, "code": "6.3.0,2.60", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 3, "points": 0.2, "question": "Volt kế có điện trở trong RV = 20 kΩ dùng để đo điện áp cho phụ tải Rx = 10 kΩ nối với nguồn có RN = 5kΩ. Điện trở tải tương đương khi mắc Volt kế là bao nhiêu?", "svg": "", "options": ["a. 2kΩ", "b. 30 kΩ", "c. 15 kΩ", "d. 6,67 kΩ"], "correct": 3, "explanation": "Khi mắc Volt kế (R_V = 20 kΩ) song song với phụ tải (R_x = 10 kΩ), điện trở tải tương đương của nhánh song song này là: R_tđ = (R_x · R_V) / (R_x + R_V) = (10 × 20) / (10 + 20) = 200 / 30 ≈ 6,67 kΩ."}, {"id": 78, "code": "6.4.0,2.61", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 4, "points": 0.2, "question": "Một cơ cấu đo có dòng toàn thang đo là 50µA, điện trở trong 2kΩ Khi dùng cơ cấu này để mở rộng thang đo  volt kế lên 100V thì tổng trở của Volt kế cần có là bao nhiêu?", "svg": "", "options": ["a. 2 MΩ", "b. 200 kΩ", "c. 20 kΩ", "d. 100 kΩ"], "correct": 0, "explanation": "Tổng trở cần có của Volt kế ở thang đo U = 100 V với dòng toàn thang I_cc = 50 µA = 50 × 10⁻⁶ A là: R_V = U / I_cc = 100 / (50 × 10⁻⁶) = 2 × 10⁶ Ω = 2 MΩ."}, {"id": 79, "code": "6.4.0,2.62", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 4, "points": 0.2, "question": "Một cơ cấu đo có dòng toàn thang đo là 50µA, điện trở trong 2kΩ. Khi dùng cơ cấu này để mở rộng thang đo điện áp lên 100V thì điện trở phụ cần có giá trị là bao nhiêu?", "svg": "", "options": ["a. 2 kΩ", "b. 1,998 MΩ", "c. 100 kΩ", "d. 50 kΩ"], "correct": 1, "explanation": "Tổng trở của Volt kế là R_V = U / I_cc = 100 V / 50 µA = 2 MΩ = 2000 kΩ. Điện trở phụ cần mắc nối tiếp với cơ cấu đo (R_cc = 2 kΩ) là: R_p = R_V - R_cc = 2000 kΩ - 2 kΩ = 1998 kΩ = 1,998 MΩ."}, {"id": 80, "code": "6.4.0,2.63", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 4, "points": 0.2, "question": "Một cơ cấu đo có dòng toàn thang đo là 1 mA, điện trở trong 100Ω. Khi dùng cơ cấu này để mở rộng thang đo dòng lên 1A thì điện trở Shunt là bao nhiêu?", "svg": "", "options": ["a. 1Ω", "b. 100 Ω", "c. 10 Ω", "d. 0,1001 kΩ"], "correct": 3, "explanation": "Hệ số mở rộng thang đo dòng: n = I / I_cc = 1 A / 1 mA = 1000. Điện trở Shunt cần mắc song song là: R_sh = R_cc / (n - 1) = 100 Ω / (1000 - 1) = 100 / 999 ≈ 0,1001 Ω (Lưu ý: đề ghi đơn vị 0,1001 kΩ ở đáp án d do lỗi gõ thêm chữ k từ 0,1001 Ω, nhưng con số 0,1001 là duy nhất đúng với 100/999)."}, {"id": 81, "code": "6.2.0,2.64", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 2, "points": 0.2, "question": "Khi đo công suất bằng vôn kế và ampe kế, điện trở trong của hai thiết bị có thể gây sai số, vì sao?", "svg": "", "options": ["a. Điện trở trong của vôn kế và ampe kế làm thay đổi dòng điện và điện áp thực trên tải", "b. Điện trở trong của hai thiết bị đo luôn lý tưởng", "c. Điện trở trong của hai thiết bị đo không tiêu thụ công suất", "d. Điện trở trong của hai thiết bị đo chỉ gây sai số khi đo mạch một chiều"], "correct": 0, "explanation": "Khi đo công suất gián tiếp bằng Vôn kế và Ampe kế, nội trở R_A (gây sụt áp I·R_A ở sơ đồ mắc sau) hoặc nội trở R_V (gây dòng rẽ U/R_V ở sơ đồ mắc trước) làm cho số chỉ U, I không đồng thời bằng đúng điện áp và dòng điện thực trên tải."}, {"id": 82, "code": "6.2.0,2.65", "chapter": 6, "chapterName": "Chương 6: Đo dòng điện và điện áp", "level": 2, "points": 0.2, "question": "Khi chọn thiết bị đo điện áp cho mạch đo có điện trở nguồn lớn, tiêu chí quan trọng nhất là gì?", "svg": "", "options": ["a. RV phải rất lớn so với điện trở tương đương của mạch đo", "b. RV càng nhỏ càng tốt", "c. RA phải rất lớn", "d. Dùng điện trở Shunt song song với tải"], "correct": 0, "explanation": "Khi mạch đo có điện trở nguồn (hoặc nội trở tương đương R_tđ) lớn, để tránh sụt áp trên điện trở nguồn do dòng rẽ qua thiết bị đo, tiêu chí quan trọng nhất là điện trở trong của Vôn kế phải rất lớn so với điện trở tương đương của mạch (R_V ≫ R_tđ)."}, {"id": 83, "code": "7.3.0,2.68", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Một hộ tiêu thụ trong 1 ngày sử dụng các thiết bị sau: Một bóng đèn công suất 40W dùng trong 8h, bình siêu tốc công suất 1500W dùng trong 0,5h, bình nóng lạnh công suất 2000W dùng trong 0,5h, quạt có công suất 45W dùng trong 12h. Điện năng tiêu thụ trong 1 ngày của hộ tiêu thụ là bao nhiêu?", "svg": "", "options": ["A. 2,61 kWh", "B. 3,58 kWh", "C. 8,04 kWh", "D. 13,02 kWh"], "correct": 0, "explanation": "Tổng điện năng tiêu thụ trong 1 ngày:\n• Bóng đèn: 40 W × 8 h = 320 Wh\n• Bình siêu tốc: 1500 W × 0,5 h = 750 Wh\n• Bình nóng lạnh: 2000 W × 0,5 h = 1000 Wh\n• Quạt: 45 W × 12 h = 540 Wh\n⇒ Tổng A = 320 + 750 + 1000 + 540 = 2610 Wh = 2,61 kWh."}, {"id": 84, "code": "7.3.0,2.69", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Một phụ tải ba pha bốn dây đối xứng để đo công suất tác dụng bằng một oát kế một pha. Nếu số chỉ oát kế là 350W thì công suất tác dụng của toàn mạch là bao nhiêu?", "svg": "", "options": ["A. 350 W", "B. 700 W", "C. 1050 W", "D. 1400 W"], "correct": 2, "explanation": "Trong mạch ba pha bốn dây đối xứng, công suất tác dụng của cả 3 pha bằng 3 lần công suất tác dụng của 1 pha: P = 3 × P_1pha = 3 × 350 W = 1050 W."}, {"id": 85, "code": "7.3.0,2.70", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Một phụ tải ba pha ba dây đối xứng có S = 15kVA, cosφ = 0,85. Tổng số chỉ của hai oát kế đo công suất tác dụng bằng bao nhiêu?", "svg": "", "options": ["A. 15 kW", "B. 12,75 kW", "C. 17,65 kW", "D. 0,85 kW"], "correct": 1, "explanation": "Theo phương pháp 2 oát kế (sơ đồ Aron) đo trong mạch ba pha 3 dây, tổng đại số số chỉ của hai oát kế chính bằng công suất tác dụng toàn mạch ba pha: P = P₁ + P₂ = S · cosφ = 15 kVA × 0,85 = 12,75 kW."}, {"id": 86, "code": "7.3.0,2.71", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Một phụ tải ba pha đối xứng có S = 20 kVA, cosφ = 0,9. Công suất tác dụng của tải bằng bao nhiêu?", "svg": "", "options": ["A. 20 kW", "B. 10 kW", "C. 15 kW", "D. 18 kW"], "correct": 3, "explanation": "Công suất tác dụng của phụ tải ba pha: P = S · cosφ = 20 kVA × 0,9 = 18 kW."}, {"id": 87, "code": "7.3.0,2.72", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Một công tơ đo năng lượng tác dụng được mắc qua máy biến dòng có tỉ số biến dòng điện là 200/5A. Nếu công tơ chỉ 520 kWh trong một tháng thì năng lượng thực tế của tải là bao nhiêu?", "svg": "", "options": ["A. 520 kWh", "B. 20.800 kWh", "C. 2.600 kWh", "D. 1.300 kWh"], "correct": 1, "explanation": "Tỉ số biến dòng K_I = 200 / 5 = 40. Năng lượng thực tế của phụ tải tiêu thụ trong tháng là: A_thực = K_I × A_đọc = 40 × 520 kWh = 20.800 kWh."}, {"id": 88, "code": "7.3.0,2.73", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Công tơ đo năng lượng qua máy biến dòng có tỉ số KI = 200/5 và máy biến áp có tỉ số KU = 35/0,4. Nếu công tơ chỉ 370kWh thì năng lượng thực của tải là bao nhiêu?", "svg": "", "options": ["A. 370 kWh", "B. 14.800 kWh", "C. 1.295.000 kWh", "D. 32.375 kWh"], "correct": 2, "explanation": "Ta có K_I = 200 / 5 = 40 và K_U = 35 / 0,4 = 87,5. Hệ số nhân tổng K = K_I × K_U = 40 × 87,5 = 3500. Năng lượng thực tế của tải: A_thực = 3500 × 370 kWh = 1.295.000 kWh."}, {"id": 89, "code": "7.2.0,2.74", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 2, "points": 0.2, "question": "Khi dòng điện tải lớn hơn dòng điện định mức của cuộn dòng oát kế, cần mắc thêm thiết bị nào để oát kế có thể sử dụng được?", "svg": "", "options": ["A. Máy biến dòng", "B. Máy biến áp", "C. Điện trở nối tiếp", "D. Tụ điện bù"], "correct": 0, "explanation": "Khi dòng điện tải lớn hơn dòng định mức của cuộn dòng Oát kế, ta phải mắc gián tiếp cuộn dòng của Oát kế qua Máy biến dòng đo lường (TI / CT) để hạ dòng xuống mức chuẩn (thường là 5A hoặc 1A)."}, {"id": 90, "code": "7.2.0,2.75", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 2, "points": 0.2, "question": "Khi cả dòng điện và điện áp của phụ tải đều lớn hơn giá trị dòng điện và điện áp định mức của oát kế, cần mắc thêm thiết bị nào để Oát kế có thể sử dụng được?", "svg": "", "options": ["A. Chỉ mắc thêm máy biến áp", "B. Chỉ mắc thêm máy biến dòng", "C. Mắc thêm máy biến dòng và máy biến áp", "D. Mắc thêm điện trở shunt ở cuộn áp"], "correct": 2, "explanation": "Khi cả dòng điện và điện áp của tải đều vượt quá định mức của Oát kế, cần kết hợp cả Máy biến dòng (TI cho cuộn dòng) và Máy biến áp đo lường (TU cho cuộn áp)."}, {"id": 91, "code": "7.2.0,2.76", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 2, "points": 0.2, "question": "Để đo công suất tác dụng trong mạch ba pha bốn dây không đối xứng, phương án phù hợp nhất là gì?", "svg": "", "options": ["A. Một oát kế một pha", "B. Hai oát kế một pha", "C. Oát kế ba pha hai phần tử", "D. Oát kế ba pha ba phần tử"], "correct": 3, "explanation": "Mạch ba pha bốn dây không đối xứng có dòng điện trên dây trung tính (i_A + i_B + i_C = i_O ≠ 0), nên bắt buộc phải đo công suất trên cả 3 pha độc lập bằng Oát kế ba pha ba phần tử (hoặc 3 oát kế 1 pha)."}, {"id": 92, "code": "7.2.0,2.77", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 2, "points": 0.2, "question": "Để đo công suất tác dụng trong mạch ba pha ba dây không đối xứng, có thể dùng phương pháp nào?", "svg": "", "options": ["A. Một oát kế mắc vào một pha bất kỳ", "B. Hai oát kế mắc vào hai pha khác nhau và dùng điện áp dây", "C. Một vôn kế và một ampe kế", "D. Chỉ dùng công tơ một pha"], "correct": 1, "explanation": "Trong mạch ba pha ba dây (không có dây trung tính, i_A + i_B + i_C = 0), dù tải đối xứng hay không đối xứng đều áp dụng được phương pháp 2 Oát kế (sơ đồ Aron): mắc cuộn dòng vào 2 pha khác nhau và cuộn áp nối giữa pha đó với pha thứ 3 (điện áp dây)."}, {"id": 93, "code": "7.3.0,2.78", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Một công tơ 1 pha có hằng số 1200 vòng/kWh. Tải có U = 220 V, I = 2 A, cosφ = 0,9 làm việc trong 30 phút. Số vòng quay của đĩa công tơ xấp xỉ là bao nhiêu?", "svg": "", "options": ["A. 118,8 vòng", "B. 237,6 vòng", "C. 475,2 vòng", "D. 712,8 vòng"], "correct": 1, "explanation": "Công suất tác dụng của tải: P = U · I · cosφ = 220 × 2 × 0,9 = 396 W = 0,396 kW. Điện năng tiêu thụ trong t = 30 phút = 0,5 h là: A = P × t = 0,396 × 0,5 = 0,198 kWh. Số vòng quay đĩa công tơ: N = C × A = 1200 vòng/kWh × 0,198 kWh = 237,6 vòng. (Lưu ý: Nếu đề tính theo 15 phút thì ra 118,8 vòng, với 30 phút chính xác là 237,6 vòng - chọn B)."}, {"id": 94, "code": "7.3.0,2.79", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Một công tơ điện có hằng số 600 vòng/kWh. Trong 5 phút, đĩa nhôm quay được 30 vòng. Công suất tiêu thụ trung bình của tải bằng bao nhiêu?", "svg": "", "options": ["A. 0,5 kW", "B. 0,6 kW", "C. 1,0 kW", "D. 1,5 kW"], "correct": 1, "explanation": "Điện năng tiêu thụ khi đĩa quay N = 30 vòng là: A = N / C = 30 / 600 = 0,05 kWh. Thời gian đo t = 5 phút = (5/60) h = 1/12 h. Công suất tiêu thụ trung bình: P = A / t = 0,05 / (1/12) = 0,6 kW."}, {"id": 95, "code": "7.3.0,2.80", "chapter": 7, "chapterName": "Chương 7: Đo công suất và năng lượng", "level": 3, "points": 0.2, "question": "Để đo công suất phản kháng trong mạch ba pha người ta mắc mạch như hình vẽ. Sơ đồ hình bên được mắc như thế nào?", "svg": "<svg viewBox=\"0 0 400 190\" class=\"q-svg\" aria-label=\"Sơ đồ 3 Oát kế đo công suất phản kháng 3 pha\">\n      <text x=\"25\" y=\"95\" font-size=\"13\" fill=\"#dc2626\" font-weight=\"bold\">A</text>\n      <text x=\"25\" y=\"120\" font-size=\"13\" fill=\"#2563eb\" font-weight=\"bold\">B</text>\n      <text x=\"25\" y=\"145\" font-size=\"13\" fill=\"#16a34a\" font-weight=\"bold\">C</text>\n      <text x=\"25\" y=\"170\" font-size=\"13\" fill=\"currentColor\" font-weight=\"bold\">O</text>\n      <line x1=\"42\" y1=\"90\" x2=\"310\" y2=\"90\" stroke=\"#dc2626\" stroke-width=\"1.8\"/>\n      <line x1=\"42\" y1=\"115\" x2=\"310\" y2=\"115\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n      <line x1=\"42\" y1=\"140\" x2=\"310\" y2=\"140\" stroke=\"#16a34a\" stroke-width=\"1.8\"/>\n      <line x1=\"42\" y1=\"165\" x2=\"310\" y2=\"165\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-dasharray=\"4,3\"/>\n      <!-- 3 Wattmeters -->\n      <rect x=\"85\" y=\"20\" width=\"55\" height=\"42\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <text x=\"112\" y=\"36\" font-size=\"10\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">W₁ (I_A)</text>\n      <text x=\"112\" y=\"52\" font-size=\"10\" fill=\"#2563eb\" text-anchor=\"middle\">U_BC</text>\n      <rect x=\"155\" y=\"20\" width=\"55\" height=\"42\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <text x=\"182\" y=\"36\" font-size=\"10\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">W₂ (I_B)</text>\n      <text x=\"182\" y=\"52\" font-size=\"10\" fill=\"#16a34a\" text-anchor=\"middle\">U_CA</text>\n      <rect x=\"225\" y=\"20\" width=\"55\" height=\"42\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <text x=\"252\" y=\"36\" font-size=\"10\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">W₃ (I_C)</text>\n      <text x=\"252\" y=\"52\" font-size=\"10\" fill=\"#dc2626\" text-anchor=\"middle\">U_AB</text>\n      <!-- Load -->\n      <rect x=\"310\" y=\"80\" width=\"55\" height=\"90\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n      <text x=\"337\" y=\"130\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">PHỤ TẢI</text>\n    </svg>", "options": ["a. Q_W = √3 · (U_BC·I_A·cos(u_BC, i_A) + U_CA·I_B·cos(u_CA, i_B) + U_AB·I_C·cos(u_AB, i_C))", "b. Q_W = √3 · (U_A·I_A·cos(u_BC, i_A) + U_B·I_B·cos(u_CA, i_B) + U_C·I_C·cos(u_AB, i_C))", "c. Q_W = U_A·I_A·cos(u_BC, i_A) + U_B·I_B·cos(u_CA, i_B) + U_C·I_C·cos(u_AB, i_C)", "d. Q_W = U_A·I_A·cos(u_BC, i_A) + U_B·I_B·cos(u_CA, i_B) + U_C·I_C·cos(u_AB, i_C·I)"], "correct": 1, "explanation": "Trong sơ đồ 3 phần tử đo công suất phản kháng (cuộn dòng mắc vào pha A, B, C; cuộn áp mắc vào điện áp dây chéo U_BC, U_CA, U_AB), vì U_dây = √3 · U_pha (U_BC = √3·U_A, U_CA = √3·U_B, U_AB = √3·U_C) nên tổng số chỉ 3 phần tử là Q_W = U_BC·I_A·cos(u_BC,i_A) + U_CA·I_B·cos(u_CA,i_B) + U_AB·I_C·cos(u_AB,i_C) = √3 · (U_A·I_A·cos(u_BC,i_A) + U_B·I_B·cos(u_CA,i_B) + U_C·I_C·cos(u_AB,i_C)) = √3·Q."}, {"id": 96, "code": "8.3.0,2.27", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Một tụ điện mẫu C = 1µF mắc vào nguồn điện áp xoay chiều hình sin có giá trị hiệu dụng U = 10V. Khi đo dòng điện chạy qua tụ được I = 3,142 mA. Hãy xác định tần số của nguồn điện xoay chiều?", "svg": "", "options": ["a. 500 Hz", "b. 100 Hz", "c. 50 Hz", "d. 1 kHz"], "correct": 2, "explanation": "Ta có dòng điện qua tụ mẫu: I = U / X_C = 2π·f·C·U ⇒ f = I / (2π·C·U) = (3,142 × 10⁻³) / (2 × 3,1416 × 10⁻⁶ × 10) = 3,142 × 10⁻³ / (6,2832 × 10⁻⁵) = 50 Hz."}, {"id": 97, "code": "8.3.0,2.28", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Một cuộn cảm mẫu L = 0,1H được mắc vào nguồn điện áp xoay chiều. Khi đo, điện áp hiệu dụng trên cuộn cảm là 31,42V, dòng hiệu dụng chạy qua cuộn cảm là 1A. Hãy xác định tần số của nguồn điện xoay chiều?", "svg": "", "options": ["a. 500 Hz", "b. 100 Hz", "c. 10 Hz", "d. 50 Hz"], "correct": 3, "explanation": "Cảm kháng của cuộn dây: X_L = U / I = 31,42 / 1 = 31,42 Ω. Mặt khác X_L = 2π·f·L ⇒ f = X_L / (2π·L) = 31,42 / (2 × 3,1416 × 0,1) = 31,42 / 0,62832 = 50 Hz."}, {"id": 98, "code": "8.3.0,2.29", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Cho tín hiệu có tần số 2kHz. Nếu bộ đếm hoạt động với thời gian cửa đo là 0,1s, hãy xác định số xung mà bộ đếm lý tưởng sẽ ghi nhận được?", "svg": "", "options": ["a. 2 xung", "b. 20 xung", "c. 2000 xung", "d. 200 xung"], "correct": 3, "explanation": "Số xung đếm được trong thời gian cửa T_c: N = f × T_c = 2000 Hz × 0,1 s = 200 xung."}, {"id": 99, "code": "8.3.0,2.30", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Một bộ đếm tần số đếm ghi nhận được 5000 xung trong khoảng thời gian cửa đo 0,5 s. Tần số tín hiệu đầu vào là bao nhiêu?", "svg": "", "options": ["a. 10 kHz", "b. 2,5 kHz", "c. 5 kHz", "d. 500 Hz"], "correct": 0, "explanation": "Tần số tín hiệu đầu vào: f = N / T_c = 5000 xung / 0,5 s = 10.000 Hz = 10 kHz."}, {"id": 100, "code": "8.3.0,2.31", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Có hai tín hiệu hình sin cùng tần số 1kHz. Biết độ lệch thời gian giữa hai tín hiệu là 0,25ms. Góc lệch pha giữa hai tín hiệu là bao nhiêu?", "svg": "", "options": ["a. 90°", "b. 45°", "c. 180°", "d. 30°"], "correct": 0, "explanation": "Chu kỳ tín hiệu: T = 1 / f = 1 / 1000 Hz = 1 ms. Góc lệch pha: φ = (Δt / T) × 360° = (0,25 ms / 1 ms) × 360° = 90°."}, {"id": 101, "code": "8.3.0,2.32", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Có hai tín hiệu hình sin cùng tần số 50 Hz và lệch pha nhau 36°. Hãy tính khoảng thời gian lệch pha tương ứng?", "svg": "", "options": ["a. 5 ms", "b. 1 ms", "c. 2 ms", "d. 10 ms"], "correct": 2, "explanation": "Chu kỳ của tín hiệu 50 Hz là: T = 1 / 50 = 0,02 s = 20 ms. Khoảng thời gian lệch pha tương ứng với φ = 36° là: Δt = (φ / 360°) × T = (36° / 360°) × 20 ms = 2 ms."}, {"id": 102, "code": "8.2.0,2.33", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 2, "points": 0.2, "question": "Khi đo các tín hiệu có tần số thấp bằng tần số kế số sử dụng phương pháp đếm xung trong khoảng thời gian cửa cố định, cần thực hiện biện pháp nào để tăng độ phân giải và cải thiện độ chính xác của phép đo?", "svg": "", "options": ["a. Giảm thời gian cửa đo", "b. Tăng thời gian cửa đo", "c. Giảm số bit hiển thị", "d. Nối tắt tín hiệu vào"], "correct": 1, "explanation": "Trong phương pháp đếm xung trực tiếp N = f · T_c, sai số lượng tử tương đối là ±1/N = ±1/(f · T_c). Khi tần số f thấp, để tăng số xung đếm N nhằm tăng độ phân giải và giảm sai số, ta cần tăng thời gian cửa đo T_c (hoặc chuyển sang đo chu kỳ)."}, {"id": 103, "code": "8.3.0,2.34", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Nếu tụ điện mẫu dùng trong phương pháp đo tần số theo biểu thức I =2πfCU có sai số +1%, trong khi dòng điện I và điện áp U được đo chính xác, thì kết quả đo tần số f sẽ bị ảnh hưởng như thế nào?", "svg": "", "options": ["a. Tần số bị lệch -1%", "b. Tần số bị lệch +1%", "c. Không đổi", "d. Bằng 0"], "correct": 0, "explanation": "Từ công thức f = I / (2π·C·U), tần số f tỷ lệ nghịch với điện dung C. Do đó nếu C có sai số +1% (C thực lớn hơn danh định 1% hoặc giá trị C thay vào công thức tăng +1%) thì tần số tính được sẽ bị lệch -1%."}, {"id": 104, "code": "8.2.0,2.35", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 2, "points": 0.2, "question": "Trong phương pháp đo tần số gián tiếp sử dụng cuộn cảm mẫu L, nếu giá trị điện cảm L bị sai số thì kết quả xác định tần số sẽ bị ảnh hưởng như thế nào?", "svg": "", "options": ["a. f được suy ra từ cảm kháng phụ thuộc L", "b. L không tham gia vào công thức xác định tần số", "c. Chỉ vôn kế gây sai số", "d. Dòng điện không liên quan tần số"], "correct": 0, "explanation": "Trong phép đo tần số dùng cuộn cảm mẫu L, tần số được suy ra từ cảm kháng X_L = U / I = 2π·f·L ⇒ f = U / (2π·L·I), nên sai số của L ảnh hưởng trực tiếp (tỷ lệ nghịch) đến kết quả xác định f."}, {"id": 105, "code": "8.3.0,2.36", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Một bộ đếm xung số có sai số lượng tử là ±1 xung. Nếu trong một phép đo bộ đếm ghi nhận được 100 xung. Hãy xác định sai số tương đối do hiện tượng lượng tử gây ra?", "svg": "", "options": ["a. ±10%", "b. ±0,01%", "c. ±1%", "d. ±100%"], "correct": 2, "explanation": "Sai số tương đối do lượng tử hóa (±1 xung) khi đếm được N = 100 xung là: γ_q = (±1 / N) × 100% = (±1 / 100) × 100% = ±1%."}, {"id": 106, "code": "8.2.0,2.37", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 2, "points": 0.2, "question": "Khi đo góc lệch pha giữa hai tín hiệu bằng phương pháp đo khoảng thời gian, ảnh hưởng của sai số đo Δt đến kết quả tính góc pha sẽ tăng trong trường hợp nào sau đây?", "svg": "", "options": ["a. Khi chu kỳ T nhỏ (tần số tín hiệu cao)", "b. Khi tần số tín hiệu bằng 0", "c. Khi điện áp một chiều không đổi", "d. Khi không có tín hiệu đưa vào mạch đo"], "correct": 0, "explanation": "Theo công thức φ = (Δt / T) × 360° = Δt · f · 360°, sai số tuyệt đối góc pha Δφ = (Δt_saisố / T) × 360°. Khi chu kỳ T càng nhỏ (tần số tín hiệu f càng cao) thì cùng một sai số đo thời gian Δt sẽ gây ra sai số góc pha càng lớn."}, {"id": 107, "code": "8.4.0,2.38", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 4, "points": 0.2, "question": "Một tụ mẫu 0,5µF mắc vào nguồn điện xoay chiều có U = 20V, dòng điện hiệu dụng chạy qua tụ đo được là I = 6,28mA. Hãy xác định tần số của nguồn điện xoay chiều?", "svg": "", "options": ["a. 200 Hz", "b. 50 Hz", "c. 100 Hz", "d. 1 kHz"], "correct": 2, "explanation": "Áp dụng công thức I = 2π·f·C·U ⇒ f = I / (2π·C·U) = (6,28 × 10⁻³) / (2 × 3,14 × 0,5 × 10⁻⁶ × 20) = 6,28 × 10⁻³ / (6,28 × 10⁻⁵) = 100 Hz."}, {"id": 108, "code": "8.3.0,2.39", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Một cuộn cảm mẫu 0,2H mắc vào nguồn điện xoay chiều có U = 62,8V và I = 1A. Tần số của nguồn xoay chiều là bao nhiêu?", "svg": "", "options": ["a. 500 Hz", "b. 25 Hz", "c. 100 Hz", "d. 50 Hz"], "correct": 3, "explanation": "Cảm kháng X_L = U / I = 62,8 / 1 = 62,8 Ω. Tần số nguồn xoay chiều: f = X_L / (2π·L) = 62,8 / (2 × 3,14 × 0,2) = 62,8 / 1,256 = 50 Hz."}, {"id": 109, "code": "8.3.0,2.40", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Bộ đếm tần số đo được f = 12345Hz với thời gian cửa đo T = 1s. Biết sai số lượng tử của phép đếm là ±1 xung. Sai số tương đối của phép đo tần số là bao nhiêu?", "svg": "", "options": ["a. ±0,0081%", "b. ±0,81%", "c. ±8,1%", "d. ±1%"], "correct": 0, "explanation": "Với f = 12345 Hz và T_c = 1 s, tổng số xung đếm được là N = f · T_c = 12345 xung. Sai số lượng tử tương đối là: γ_q = (±1 / 12345) × 100% ≈ ±0,0081%."}, {"id": 110, "code": "8.3.0,2.41", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Một tín hiệu 10 kHz lệch thời gian 10µs so với tín hiệu chuẩn cùng tần số. Góc lệch pha là bao nhiêu?", "svg": "", "options": ["a. 90°", "b. 10°", "c. 36°", "d. 180°"], "correct": 2, "explanation": "Chu kỳ tín hiệu: T = 1 / f = 1 / 10.000 Hz = 100 µs. Góc lệch pha: φ = (Δt / T) × 360° = (10 µs / 100 µs) × 360° = 36°."}, {"id": 111, "code": "8.3.0,2.42", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 3, "points": 0.2, "question": "Một hệ thống điện 50 Hz có điện áp và dòng lệch pha 30°. Khoảng thời gian lệch giữa hai tín hiệu là bao nhiêu?", "svg": "", "options": ["a. 1,67 ms", "b. 3,33 ms", "c. 5 ms", "d. 20 ms"], "correct": 0, "explanation": "Chu kỳ lưới điện 50 Hz là T = 1 / 50 = 20 ms. Khoảng thời gian lệch pha tương ứng góc 30° là: Δt = (30° / 360°) × 20 ms = 20 / 12 ≈ 1,67 ms."}, {"id": 112, "code": "8.2.0,2.43", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 2, "points": 0.2, "question": "Một tần số kế số dùng chuẩn thời gian sai lệch +0,01%. Kết quả đo tần số sẽ chịu ảnh hưởng chủ yếu bởi yếu tố nào?", "svg": "", "options": ["a. Điện trở shunt", "b. Sai số chuẩn thời gian/cửa đo", "c. Nhiệt điện trở", "d. Cầu Kelvin"], "correct": 1, "explanation": "Trong tần số kế số, số chỉ tần số phụ thuộc trực tiếp vào độ chính xác của bộ tạo xung chuẩn thời gian (Timebase / Gate time T_c). Chuẩn thời gian lệch 0,01% sẽ làm thời gian cửa đo lệch 0,01% và gây sai số trực tiếp lên kết quả đo tần số."}, {"id": 113, "code": "8.2.0,2.44", "chapter": 8, "chapterName": "Chương 8: Đo tần số và góc pha", "level": 2, "points": 0.2, "question": "Khi cần đo chính xác góc pha nhỏ giữa hai tín hiệu cùng tần số, yêu cầu quan trọng nhất của khâu đo thời gian là gì?", "svg": "", "options": ["a. Độ phân giải thời gian cao và ngưỡng so sánh ổn định", "b. Điện trở shunt có giá trị nhỏ", "c. Điện dung mẫu có giá trị lớn", "d. Volt kế có thang đo thấp"], "correct": 0, "explanation": "Khi đo góc lệch pha nhỏ (Δt rất bé), khâu đo thời gian bắt buộc phải có độ phân giải thời gian cao (xung nhịp chuẩn tần số lớn) và bộ so sánh qua điểm 0 (Zero-crossing detector) có ngưỡng so sánh thật ổn định để tránh nhiễu jitter."}, {"id": 114, "code": "9.2.0,2.45", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 2, "points": 0.2, "question": "Trong phương pháp đo so sánh kiểu nối tiếp, nếu điện trở mẫu R0 và điện trở cần đo Rx có cùng giá trị dòng điện. Hãy xác định tỉ số điện áp trên chúng bằng gì?", "svg": "", "options": ["a. U0/Ux = R0/Rx", "b. U0/Ux = Rx/R0", "c. U0/Ux = I0/Ix", "d. U0/Ux = 1/(R0Rx)"], "correct": 0, "explanation": "Khi mắc nối tiếp R₀ và R_x thì dòng điện qua chúng bằng nhau (I₀ = I_x = I). Do đó tỷ số điện áp rơi trên chúng là: U₀ / U_x = (I · R₀) / (I · R_x) = R₀ / R_x."}, {"id": 115, "code": "9.3.0,2.46", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Điện trở mẫu R0 = 100Ω mắc nối tiếp Rx. Khi đặt vào mạch một điện áp, đo được hiệu điện thế trên R0 là U0 = 2 V, trên Rx là Ux = 6V. Rx bằng bao nhiêu?", "svg": "", "options": ["a. 100 Ω", "b. 33,3 Ω", "c. 300 Ω", "d. 600 Ω"], "correct": 2, "explanation": "Vì R₀ mắc nối tiếp với R_x nên U_x / U₀ = R_x / R₀ ⇒ R_x = R₀ · (U_x / U₀) = 100 Ω × (6 V / 2 V) = 300 Ω."}, {"id": 116, "code": "9.2.0,2.47", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 2, "points": 0.2, "question": "Trong phương pháp đo so sánh mắc song song, nếu điện trở mẫu R0 và điện trở cần đo Rx được mắc song song và cùng chịu một hiệu điện thế. Tỉ số dòng điện qua hai nhánh phụ thuộc vào R0​ và Rx​ như thế nào?", "svg": "", "options": ["a. I₀/I_x = R_x · R₀", "b. I₀/I_x = R₀ / R_x", "c. I₀/I_x = U₀ / U_x", "d. I₀/I_x = R_x / R₀ (Đề gốc gõ nhầm thành R₀/Rx)"], "correct": 3, "explanation": "Khi R₀ và R_x mắc song song, chúng chịu cùng một hiệu điện thế (U₀ = U_x = U), nên I₀ · R₀ = I_x · R_x ⇒ I₀ / I_x = R_x / R₀ (tỷ lệ nghịch với điện trở). Lưu ý: Đề gốc gõ nhầm phương án d thành R₀/Rx không chỉ số dưới, bản chuẩn là R_x/R₀."}, {"id": 117, "code": "9.3.0,2.48", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Điện trở mẫu R0 = 1 kΩ được mắc song song với Rx. Biết dòng điện qua R0 là 2mA, qua Rx là 5mA. Hãy tính giá trị của Rx?", "svg": "", "options": ["a. 250 Ω", "b. 2,5 kΩ", "c. 1 kΩ", "d. 400 Ω"], "correct": 3, "explanation": "Do R₀ và R_x mắc song song nên: U = I₀ · R₀ = I_x · R_x ⇒ R_x = R₀ · (I₀ / I_x) = 1000 Ω × (2 mA / 5 mA) = 400 Ω."}, {"id": 118, "code": "9.2.0,2.49", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 2, "points": 0.2, "question": "Một dây dẫn cần đo có Rx = 0,05 Ω. Để giảm ảnh hưởng của điện trở dây nối và điện trở tiếp xúc đến kết quả đo, nên ưu tiên sử dụng phương pháp đo nào?”", "svg": "", "options": ["a. Đo điện trở nhỏ bằng phương pháp chuyên dụng (hoặc dùng cầu Kelvin)", "b. Dùng ôm kế thang MΩ", "c. Dùng tần số kế cộng hưởng", "d. Dùng tụ điện mẫu"], "correct": 0, "explanation": "Với điện trở rất nhỏ (R_x = 0,05 Ω < 1 Ω), điện trở dây đo và điện trở tiếp xúc có giá trị tương đương với R_x. Vì vậy cần dùng phương pháp đo 4 dây hoặc cầu kép Kelvin (Thomson) để loại bỏ ảnh hưởng của dây nối và tiếp xúc."}, {"id": 119, "code": "9.2.0,2.50", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 2, "points": 0.2, "question": "Đối với phép đo điện trở cách điện có giá trị cỡ MΩ, thiết bị đo cần đáp ứng yêu cầu nào để hạn chế sai số và đảm bảo kết quả đo chính xác?", "svg": "", "options": ["a. Có khả năng đo dòng rất nhỏ và điện trở vào lớn", "b. Có điện trở shunt rất nhỏ", "c. Có dòng tiêu thụ nội bộ lớn để tăng độ ổn định phép đo", "d. Có điện trở vào nhỏđể tăng độ nhạy của thiết bị đo"], "correct": 0, "explanation": "Khi đo điện trở cách điện rất lớn (cỡ MΩ đến GΩ), dòng điện đi qua mẫu rất nhỏ (cỡ µA, nA), nên thiết bị đo phải có khả năng đo dòng rất nhỏ (độ nhạy cao) và điện trở vào cực lớn để không làm rẽ mạch dòng đo."}, {"id": 120, "code": "9.2.0,2.51", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 2, "points": 0.2, "question": "Trong phép đo V-A dùng nguồn xoay chiều để đo cuộn dây, kết quả thu được là tổng trở chứ không phải điện trở thuần. Nguyên nhân vì sao?", "svg": "", "options": ["a. Dòng điện không chạy qua cuộn dây", "b. Điện trở thuần biến mất", "c. Cuộn dây có cảm kháng phụ thuộc tần số", "d. Vôn kế không đo được AC"], "correct": 2, "explanation": "Khi đặt nguồn xoay chiều tần số f vào cuộn dây (có điện trở thuần R và điện cảm L), xuất hiện cảm kháng X_L = 2πfL nên tỷ số U / I cho ta tổng trở Z = √(R² + X_L²) chứ không phải điện trở thuần R."}, {"id": 121, "code": "9.2.0,2.52", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 2, "points": 0.2, "question": "Khi cần đo điện trở nhanh, có thể dùng ôm kế đo trực tiếp. Tuy nhiên, nếu yêu cầu độ chính xác cao hơn thì nên ưu tiên sử dụng phương pháp nào?", "svg": "", "options": ["a. Xác định giá trị điện trở chỉ bằng cách đọc vòng màu", "b. Phương pháp đo so sánh bằng điện trở mẫu hoặc dùng cầu đo", "c. Chỉ dùng nguồn xoay chiều bất kỳ để đo", "d. Chỉ dùng ampe kế mắc nối tiếp với điện trở cần đo"], "correct": 1, "explanation": "Ôm kế đo trực tiếp nhanh nhưng độ chính xác thấp (do phụ thuộc nguồn pin và thang đo phi tuyến). Khi cần độ chính xác cao, người ta ưu tiên dùng phương pháp đo so sánh với điện trở mẫu hoặc dùng cầu đo (Wheatstone / Kelvin)."}, {"id": 122, "code": "9.3.0,2.53", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Dùng phương pháp volt – ampe (V-A) để đo điện trở một cuộn dây có giá trị Rx = 120 mΩ. Biết điện trở trong của volt kế RV=50 kΩ và của ampe kế RA=0,1 Ω. Nếu chọn sơ đồ đo không phù hợp, nguyên nhân nào có thể gây sai số lớn nhất?", "svg": "", "options": ["a. Điện trở ampe kế và dây nối cùng bậc với Rx gây sai số lớn", "b. Vôn kế có điện trở trong quá nhỏ so với Rx", "c. Dòng điện qua Rx luôn bằng 0 do ảnh hưởng của ampe kế", "d. Nguồn một chiều không thể dùng để đo điện trở thấp"], "correct": 0, "explanation": "Điện trở cần đo R_x = 120 mΩ = 0,12 Ω rất nhỏ và cùng bậc độ lớn với điện trở trong của Ampe kế (R_A = 0,1 Ω) cũng như điện trở dây nối. Nếu mắc Vôn kế bao gồm cả Ampe kế (sơ đồ mắc nối tiếp/mắc sau), R_A = 0,1 Ω sẽ cộng trực tiếp vào R_x = 0,12 Ω gây sai số gần 83%."}, {"id": 123, "code": "9.3.0,2.54", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Cho điện trở mẫu R0 = 500Ω nối tiếp Rx. Nếu U0 = 5 V và Ux = 2V thì điện trở Rx bằng bao nhiêu?", "svg": "", "options": ["a. 200 Ω", "b. 1250 Ω", "c. 500 Ω", "d. 2 kΩ"], "correct": 0, "explanation": "Mạch nối tiếp có cùng dòng điện I: R_x = R₀ · (U_x / U₀) = 500 Ω × (2 V / 5 V) = 200 Ω."}, {"id": 124, "code": "9.3.0,2.55", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Cho điện trở mẫu R0 = 200Ω song song với điện trở cần đo Rx. Nếu I0 = 10mA, Ix = 4mA thì điện trở Rx bằng bao nhiêu?", "svg": "", "options": ["a. 200 Ω", "b. 80 Ω", "c. 500 Ω", "d. 2 kΩ"], "correct": 2, "explanation": "Mạch song song có cùng điện áp U: R_x = R₀ · (I₀ / I_x) = 200 Ω × (10 mA / 4 mA) = 500 Ω."}, {"id": 125, "code": "9.3.0,2.56", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Một điện trở nhỏ 0,02Ω có điện trở tiếp xúc mỗi đầu 0,005Ω nếu đo hai dây. Sai số tương đối do tiếp xúc xấp xỉ bằng bao nhiêu?", "svg": "", "options": ["a. 25%", "b. 5%", "c. 0,5%", "d. 50%"], "correct": 3, "explanation": "Tổng điện trở tiếp xúc ở cả 2 đầu dây đo là: ΔR_tx = 2 × 0,005 Ω = 0,01 Ω. Sai số tương đối do điện trở tiếp xúc gây ra so với R_x = 0,02 Ω là: γ = (0,01 / 0,02) × 100% = 50%."}, {"id": 126, "code": "9.3.0,2.57", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Trong phép đo điện trở lớn 10MΩ với nguồn 100 V, dòng điện lý tưởng qua điện trở là bao nhiêu?", "svg": "", "options": ["a. 100 µA", "b. 1 mA", "c. 10 µA", "d. 10 mA"], "correct": 2, "explanation": "Theo định luật Ohm: I = U / R = 100 V / (10 × 10⁶ Ω) = 10 × 10⁻⁶ A = 10 µA."}, {"id": 127, "code": "9.2.0,2.58", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 2, "points": 0.2, "question": "Nếu đo điện trở bằng nguồn xoay chiều ở tần số cao, điện dung ký sinh song song với điện trở lớn sẽ gây hậu quả gì?", "svg": "", "options": ["a. Không ảnh hưởng vì tụ hở ở AC", "b. Làm kết quả không còn phản ánh điện trở thuần chính xác", "c. Làm dòng bằng 0", "d. Làm điện trở tăng vô hạn"], "correct": 1, "explanation": "Ở tần số cao, dung kháng của điện dung ký sinh mắc song song với điện trở lớn (X_C = 1 / 2πfC) giảm nhỏ và rẽ dòng xoay chiều, làm tổng trở đo được nhỏ hơn nhiều so với điện trở thuần R thực tế."}, {"id": 128, "code": "9.2.0,2.59", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 2, "points": 0.2, "question": "Khi dùng cầu đo, độ nhạy của điện kế chỉ không ảnh hưởng như thế nào?", "svg": "", "options": ["a. Chỉ quyết định nguồn nuôi", "b. Không có vai trò", "c. Quyết định khả năng phát hiện trạng thái mất cân bằng nhỏ", "d. Làm thay đổi điện trở mẫu danh định"], "correct": 2, "explanation": "Trong cầu đo cân bằng, điện kế chỉ không (Galvanometer) dùng để phát hiện dòng/áp lệch trên đường chéo cầu. Độ nhạy của điện kế càng cao thì khả năng phát hiện trạng thái mất cân bằng nhỏ càng tốt, giúp giảm sai số ngưỡng nhạy của cầu."}, {"id": 129, "code": "9.3.0,2.60", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Một điện trở nhỏ được đo bằng phương pháp vôn kế – ampe kế, thu được U = 0,06V, I = 0,5A. Biết tổng điện áp rơi trên dây nối và tiếp xúc là 0,01V. Nếu bỏ qua điện áp phụ này khi tính toán, sai số tương đối của giá trị Rx​ bằng bao nhiêu?", "svg": "", "options": ["a. 1,67%", "b. 16,7%", "c. 0,167%", "d. 50%"], "correct": 1, "explanation": "Giá trị điện trở tính được khi bỏ qua sụt áp phụ là R_đo = U / I = 0,06 / 0,5 = 0,12 Ω, trong khi sụt áp phụ ΔU = 0,01 V tạo ra sai số tương đối: γ = (ΔU / U) × 100% = (0,01 / 0,06) × 100% ≈ 16,67% ≈ 16,7%."}, {"id": 130, "code": "9.3.0,2.61", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Cho cầu xoay chiều Anderson như hình vẽ, biết khi cầu cân bằng có R₃ = 2000Ω, R₂ = 1000Ω, r = 200Ω, C = 6µF, R₄ = 2000Ω. Hãy xác định điện cảm L_x và điện trở R_x của cuộn dây.", "svg": "<svg viewBox=\"0 0 380 190\" class=\"q-svg\" aria-label=\"Cầu xoay chiều Anderson\">\n      <!-- Top branch: Rx, Lx and R3 -->\n      <line x1=\"60\" y1=\"45\" x2=\"60\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"320\" y1=\"45\" x2=\"320\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"60\" y1=\"45\" x2=\"90\" y2=\"45\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"90\" y=\"38\" width=\"32\" height=\"14\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.8\"/>\n      <text x=\"106\" y=\"33\" font-size=\"11\" fill=\"#dc2626\" text-anchor=\"middle\" font-weight=\"bold\">R_x</text>\n      <path d=\"M 122 45 Q 130 32 138 45 Q 146 32 154 45 Q 162 32 170 45\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"2\"/>\n      <text x=\"146\" y=\"30\" font-size=\"11\" fill=\"#dc2626\" text-anchor=\"middle\" font-weight=\"bold\">L_x</text>\n      <line x1=\"170\" y1=\"45\" x2=\"225\" y2=\"45\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <circle cx=\"190\" cy=\"45\" r=\"3\" fill=\"currentColor\"/>\n      <rect x=\"225\" y=\"38\" width=\"42\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"246\" y=\"33\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₃=2kΩ</text>\n      <line x1=\"267\" y1=\"45\" x2=\"320\" y2=\"45\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <!-- Middle Anderson branch: G, r, C -->\n      <circle cx=\"190\" cy=\"82\" r=\"11\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n      <text x=\"190\" y=\"86\" font-size=\"11\" fill=\"#2563eb\" text-anchor=\"middle\" font-weight=\"bold\">G</text>\n      <line x1=\"190\" y1=\"45\" x2=\"190\" y2=\"71\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <line x1=\"190\" y1=\"93\" x2=\"190\" y2=\"105\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <rect x=\"184\" y=\"105\" width=\"12\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"178\" y=\"121\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"end\" font-weight=\"bold\">r=200Ω</text>\n      <line x1=\"190\" y1=\"129\" x2=\"190\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <line x1=\"190\" y1=\"98\" x2=\"250\" y2=\"98\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <line x1=\"250\" y1=\"90\" x2=\"250\" y2=\"106\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n      <line x1=\"257\" y1=\"90\" x2=\"257\" y2=\"106\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n      <text x=\"254\" y=\"85\" font-size=\"11\" fill=\"#2563eb\" text-anchor=\"middle\" font-weight=\"bold\">C=6µF</text>\n      <line x1=\"257\" y1=\"98\" x2=\"320\" y2=\"98\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <!-- Bottom branch: R2 and R4 -->\n      <line x1=\"60\" y1=\"145\" x2=\"105\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"105\" y=\"138\" width=\"42\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"126\" y=\"165\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₂=1kΩ</text>\n      <line x1=\"147\" y1=\"145\" x2=\"225\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"225\" y=\"138\" width=\"42\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"246\" y=\"165\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₄=2kΩ</text>\n      <line x1=\"267\" y1=\"145\" x2=\"320\" y2=\"145\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n    </svg>", "options": ["a. Lx = 24H; Rx​ = 1kΩ", "b. Lx = 28,8H; Rx = 1kΩ", "c. Lx = 28,8H; Rx = 2kΩ", "d. Lx = 4,8H; Rx =1kΩ"], "correct": 1, "explanation": "Khi cầu xoay chiều Anderson cân bằng:\n• Điện trở cuộn dây: R_x = (R₂ · R₃) / R₄ = (1000 × 2000) / 2000 = 1000 Ω = 1 kΩ.\n• Điện cảm cuộn dây (theo công thức giáo trình TNUT): L_x = C · [R₃·R₄ + r·(R₃ + R₄)] = 6×10⁻⁶ × [2000×2000 + 200×(2000 + 2000)] = 24 + 4,8 = 28,8 H."}, {"id": 131, "code": "9.3.0,2.62", "chapter": 9, "chapterName": "Chương 9: Đo các thông số của mạch điện", "level": 3, "points": 0.2, "question": "Cho cầu xoay chiều Schering như hình vẽ, biết khi cầu cân bằng có R₁ = 12kΩ, C₁ = C₃ = 1,5µF, R₂ = 5kΩ. Biết cầu xoay chiều sử dụng nguồn có tần số 1kHz. Hãy xác định R_x, C_x, D?", "svg": "<svg viewBox=\"0 0 380 185\" class=\"q-svg\" aria-label=\"Cầu xoay chiều Schering\">\n      <line x1=\"70\" y1=\"50\" x2=\"70\" y2=\"140\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"310\" y1=\"50\" x2=\"310\" y2=\"140\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <!-- Top left C -->\n      <line x1=\"70\" y1=\"50\" x2=\"125\" y2=\"50\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"125\" y1=\"40\" x2=\"125\" y2=\"60\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n      <line x1=\"133\" y1=\"40\" x2=\"133\" y2=\"60\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n      <text x=\"129\" y=\"34\" font-size=\"11\" fill=\"#2563eb\" text-anchor=\"middle\" font-weight=\"bold\">C₃=1,5µF</text>\n      <line x1=\"133\" y1=\"50\" x2=\"220\" y2=\"50\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <!-- Top right R1 // C1 -->\n      <rect x=\"230\" y=\"25\" width=\"40\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"250\" y=\"20\" font-size=\"10\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₁=12kΩ</text>\n      <line x1=\"246\" y1=\"50\" x2=\"246\" y2=\"66\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n      <line x1=\"254\" y1=\"50\" x2=\"254\" y2=\"66\" stroke=\"#2563eb\" stroke-width=\"2.2\"/>\n      <text x=\"250\" y=\"78\" font-size=\"10\" fill=\"#2563eb\" text-anchor=\"middle\" font-weight=\"bold\">C₁=1,5µF</text>\n      <line x1=\"220\" y1=\"50\" x2=\"310\" y2=\"50\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <!-- Galvanometer G -->\n      <circle cx=\"190\" cy=\"95\" r=\"12\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"1.8\"/>\n      <text x=\"190\" y=\"99\" font-size=\"12\" fill=\"#2563eb\" text-anchor=\"middle\" font-weight=\"bold\">G</text>\n      <line x1=\"190\" y1=\"50\" x2=\"190\" y2=\"83\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <line x1=\"190\" y1=\"107\" x2=\"190\" y2=\"140\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\n      <!-- Bottom left Rx + Cx -->\n      <line x1=\"70\" y1=\"140\" x2=\"95\" y2=\"140\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <rect x=\"95\" y=\"133\" width=\"32\" height=\"14\" fill=\"none\" stroke=\"#dc2626\" stroke-width=\"1.8\"/>\n      <text x=\"111\" y=\"162\" font-size=\"11\" fill=\"#dc2626\" text-anchor=\"middle\" font-weight=\"bold\">R_x</text>\n      <line x1=\"127\" y1=\"140\" x2=\"148\" y2=\"140\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <line x1=\"148\" y1=\"131\" x2=\"148\" y2=\"149\" stroke=\"#dc2626\" stroke-width=\"2.2\"/>\n      <line x1=\"155\" y1=\"131\" x2=\"155\" y2=\"149\" stroke=\"#dc2626\" stroke-width=\"2.2\"/>\n      <text x=\"152\" y=\"162\" font-size=\"11\" fill=\"#dc2626\" text-anchor=\"middle\" font-weight=\"bold\">C_x</text>\n      <line x1=\"155\" y1=\"140\" x2=\"225\" y2=\"140\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <!-- Bottom right R2 -->\n      <rect x=\"225\" y=\"133\" width=\"44\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n      <text x=\"247\" y=\"162\" font-size=\"11\" fill=\"currentColor\" text-anchor=\"middle\" font-weight=\"bold\">R₂=5kΩ</text>\n      <line x1=\"269\" y1=\"140\" x2=\"310\" y2=\"140\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n    </svg>", "options": ["a. Rx=5kΩ; Cx=0,625μF; D=113,1", "b. Rx=12kΩ; Cx=0,625μF; D=113,1", "c. Rx=5kΩ; Cx=1,5μF; D=113,1", "d. Rx=5kΩ; Cx=0,625μF; D=11,31"], "correct": 0, "explanation": "Khi cầu xoay chiều Schering cân bằng (với f = 1 kHz ⇒ ω = 2πf = 2000π rad/s):\n• R_x = R₂ · (C₁ / C₃) = 5 kΩ × (1,5 µF / 1,5 µF) = 5 kΩ.\n• C_x = C₃ · (R₂ / R₁) = 1,5 µF × (5 kΩ / 12 kΩ) = 0,625 µF.\n• Hệ số tổn hao môi chất: D = tanδ = ω·C₁·R₁ = 2π × 1000 × 1,5×10⁻⁶ × 12000 = 36π ≈ 113,1."}];
+
+    const STORAGE_KEY = 'tnut_tee0327_quiz_state_v1';
+
+    let state = {
+      mode: 'practice',
+      liteMode: true,
+      darkMode: false,
+      autoNextOnCorrect: true,
+      autoNextDelay: 1400,
+      skipMastered: false,
+      autoRemoveWrong: true,
+      masteredIds: [],
+      wrongIds: [],
+      sessionAnswers: {},
+      sessionAttempts: 0,
+      sessionCorrect: 0,
+      practiceList: [],
+      currentIndex: 0
+    };
+
+    let autoNextTimer = null;
+
+    // Exam state
+    let examState = {
+      questions: [],
+      currentIndex: 0,
+      answers: {},
+      flagged: {},
+      durationSec: 3600,
+      remainingSec: 3600,
+      submitted: false,
+      timerInterval: null
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          state.liteMode = parsed.liteMode !== undefined ? parsed.liteMode : true;
+          state.darkMode = !!parsed.darkMode;
+          state.autoNextOnCorrect = parsed.autoNextOnCorrect !== undefined ? parsed.autoNextOnCorrect : true;
+          state.autoNextDelay = parsed.autoNextDelay || 1400;
+          state.autoRemoveWrong = parsed.autoRemoveWrong !== undefined ? parsed.autoRemoveWrong : true;
+          state.masteredIds = Array.isArray(parsed.masteredIds) ? parsed.masteredIds : [];
+          state.wrongIds = Array.isArray(parsed.wrongIds) ? parsed.wrongIds : [];
+        }
+      } catch (e) {
+        // Ignore storage errors in sandboxed iframe
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          liteMode: state.liteMode,
+          darkMode: state.darkMode,
+          autoNextOnCorrect: state.autoNextOnCorrect,
+          autoNextDelay: state.autoNextDelay,
+          autoRemoveWrong: state.autoRemoveWrong,
+          masteredIds: state.masteredIds,
+          wrongIds: state.wrongIds
+        }));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toastBox');
+      box.textContent = msg;
+      box.style.display = 'block';
+      clearTimeout(box._t);
+      box._t = setTimeout(() => {
+        box.style.display = 'none';
+      }, 2200);
+    }
+
+    function applyThemeAndPerformance() {
+      document.body.classList.toggle('lite-mode', state.liteMode);
+      document.body.classList.toggle('dark-mode', state.darkMode);
+      document.getElementById('liteStatusText').textContent = state.liteMode ? 'Bật' : 'Tắt';
+      document.getElementById('btnLiteMode').classList.toggle('active-toggle', state.liteMode);
+      document.getElementById('btnDarkMode').textContent = state.darkMode ? '☀️ Giao diện Sáng' : '🌙 Giao diện Tối';
+      document.getElementById('chkAutoNext').checked = state.autoNextOnCorrect;
+      document.getElementById('selectAutoDelay').value = String(state.autoNextDelay);
+      document.getElementById('chkAutoRemoveWrong').checked = state.autoRemoveWrong;
+    }
+
+    function toggleLiteMode() {
+      state.liteMode = !state.liteMode;
+      applyThemeAndPerformance();
+      saveState();
+      showToast(state.liteMode ? '⚡ Đã bật chế độ Siêu Mượt cho máy yếu!' : 'Đã bật lại hiệu ứng chuyển động.');
+    }
+
+    function toggleDarkMode() {
+      state.darkMode = !state.darkMode;
+      applyThemeAndPerformance();
+      saveState();
+    }
+
+    function updateSettings() {
+      state.autoNextOnCorrect = document.getElementById('chkAutoNext').checked;
+      state.autoNextDelay = parseInt(document.getElementById('selectAutoDelay').value, 10) || 1400;
+      state.autoRemoveWrong = document.getElementById('chkAutoRemoveWrong').checked;
+      saveState();
+    }
+
+    function updateStatsBar() {
+      document.getElementById('statTotal').textContent = QUESTIONS.length + ' câu';
+      document.getElementById('statMastered').textContent = state.masteredIds.length + ' / ' + QUESTIONS.length;
+      document.getElementById('statWrong').textContent = state.wrongIds.length + ' câu';
+      document.getElementById('badgeWrongCount').textContent = String(state.wrongIds.length);
+      const acc = state.sessionAttempts > 0 ? Math.round((state.sessionCorrect / state.sessionAttempts) * 100) : 0;
+      document.getElementById('statAccuracy').textContent = acc + '%';
+    }
+
+    function switchMode(newMode) {
+      cancelAutoNext();
+      state.mode = newMode;
+      document.getElementById('tabPractice').classList.toggle('active', newMode === 'practice');
+      document.getElementById('tabWrong').classList.toggle('active', newMode === 'wrong');
+      document.getElementById('tabExam').classList.toggle('active', newMode === 'exam');
+      document.getElementById('tabFormulas').classList.toggle('active', newMode === 'formulas');
+
+      document.getElementById('viewPractice').classList.toggle('hidden', newMode !== 'practice' && newMode !== 'wrong');
+      document.getElementById('viewExam').classList.toggle('hidden', newMode !== 'exam');
+      document.getElementById('viewFormulas').classList.toggle('hidden', newMode !== 'formulas');
+
+      if (newMode === 'practice') {
+        document.getElementById('practiceToolbar').classList.remove('hidden');
+        document.getElementById('wrongModeBanner').classList.add('hidden');
+        applyPracticeFilters();
+      } else if (newMode === 'wrong') {
+        document.getElementById('practiceToolbar').classList.add('hidden');
+        document.getElementById('wrongModeBanner').classList.remove('hidden');
+        startWrongModeSession();
+      } else if (newMode === 'exam') {
+        if (examState.questions.length === 0) {
+          generateNewExam();
+        } else {
+          renderExamQuestion();
+        }
+      } else if (newMode === 'formulas') {
+        renderBankSearch();
+      }
+    }
+
+    function applyPracticeFilters() {
+      cancelAutoNext();
+      const chVal = document.getElementById('selectChapter').value;
+      const lvVal = document.getElementById('selectLevel').value;
+      const orderVal = document.getElementById('selectOrder').value;
+      const skipMastered = document.getElementById('chkSkipMastered').checked;
+      state.skipMastered = skipMastered;
+
+      let filtered = QUESTIONS.filter(q => {
+        if (chVal !== 'all' && q.chapter !== parseInt(chVal, 10)) return false;
+        if (lvVal !== 'all' && q.level !== parseInt(lvVal, 10)) return false;
+        if (skipMastered && state.masteredIds.includes(q.id)) return false;
+        return true;
+      });
+
+      if (orderVal === 'random') {
+        filtered = [...filtered].sort(() => Math.random() - 0.5);
+      } else if (orderVal === 'level_asc') {
+        filtered = [...filtered].sort((a, b) => a.level - b.level || a.id - b.id);
+      } else if (orderVal === 'level_desc') {
+        filtered = [...filtered].sort((a, b) => b.level - a.level || a.id - b.id);
+      }
+
+      state.practiceList = filtered;
+      state.currentIndex = 0;
+      document.getElementById('badgeTotalCount').textContent = String(filtered.length);
+      renderPracticeView();
+    }
+
+    function disableSkipMastered() {
+      document.getElementById('chkSkipMastered').checked = false;
+      if (state.mode === 'wrong') {
+        switchMode('practice');
+      } else {
+        applyPracticeFilters();
+      }
+    }
+
+    function startWrongModeSession() {
+      cancelAutoNext();
+      const wrongList = QUESTIONS.filter(q => state.wrongIds.includes(q.id));
+      state.practiceList = wrongList;
+      state.currentIndex = 0;
+      // Clear previous session answers for these wrong questions so the user can re-answer them fresh
+      wrongList.forEach(q => {
+        delete state.sessionAnswers[q.id];
+      });
+      renderPracticeView();
+    }
+
+    function restartWrongSession() {
+      startWrongModeSession();
+      showToast('🔁 Đã làm mới lượt ôn tập các câu sai!');
+    }
+
+    function filterOnlyWrongInCurrent() {
+      const wrongInCurrent = state.practiceList.filter(q => state.wrongIds.includes(q.id));
+      if (wrongInCurrent.length === 0) {
+        showToast('🎉 Không có câu sai nào trong danh sách hiện tại!');
+        return;
+      }
+      wrongInCurrent.forEach(q => {
+        delete state.sessionAnswers[q.id];
+      });
+      state.practiceList = wrongInCurrent;
+      state.currentIndex = 0;
+      renderPracticeView();
+      showToast('🔁 Đang lọc ' + wrongInCurrent.length + ' câu sai để làm lại!');
+    }
+
+    function resetCurrentFilterSession() {
+      state.practiceList.forEach(q => {
+        delete state.sessionAnswers[q.id];
+      });
+      state.currentIndex = 0;
+      renderPracticeView();
+      showToast('🔄 Đã làm mới các câu hỏi trong mục đang chọn!');
+    }
+
+    function retryCurrentQuestion() {
+      cancelAutoNext();
+      const q = state.practiceList[state.currentIndex];
+      if (!q) return;
+      delete state.sessionAnswers[q.id];
+      renderPracticeView();
+    }
+
+    function levelBadgeClass(lv) {
+      if (lv === 2) return 'tag tag-lv2';
+      if (lv === 3) return 'tag tag-lv3';
+      return 'tag tag-lv4';
+    }
+
+    function levelLabelText(lv) {
+      if (lv === 2) return 'Cấp độ 2 (Thông hiểu) • 0,2đ';
+      if (lv === 3) return 'Cấp độ 3 (Vận dụng) • 0,2đ';
+      return 'Cấp độ 4 (Vận dụng cao) • 0,2đ';
+    }
+
+    function renderPracticeView() {
+      updateStatsBar();
+      const list = state.practiceList;
+      const emptyEl = document.getElementById('practiceEmptyState');
+      const wsEl = document.getElementById('practiceWorkspace');
+
+      if (!list || list.length === 0) {
+        emptyEl.classList.remove('hidden');
+        wsEl.classList.add('hidden');
+        if (state.mode === 'wrong') {
+          document.getElementById('emptyTitle').textContent = '🎉 Tuyệt vời! Bạn không còn câu trả lời sai nào!';
+          document.getElementById('emptyDesc').textContent = 'Tất cả các câu từng làm sai đều đã được bạn chinh phục. Hãy quay lại ôn tập theo chương hoặc vào thi thử 40 câu nhé!';
+        } else {
+          document.getElementById('emptyTitle').textContent = 'Đã hoàn thành hết câu hỏi trong bộ lọc này!';
+          document.getElementById('emptyDesc').textContent = 'Bạn có thể tắt "Bỏ qua câu đã thuộc" hoặc chọn chương/cấp độ khác để tiếp tục luyện tập.';
+        }
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+      wsEl.classList.remove('hidden');
+
+      if (state.currentIndex >= list.length) state.currentIndex = list.length - 1;
+      if (state.currentIndex < 0) state.currentIndex = 0;
+
+      const q = list[state.currentIndex];
+      document.getElementById('qPosBadge').textContent = 'Câu ' + (state.currentIndex + 1) + ' / ' + list.length;
+      document.getElementById('qCodeBadge').textContent = 'Câu ' + q.code;
+      document.getElementById('qChapBadge').textContent = q.chapterName;
+
+      const lvEl = document.getElementById('qLevelBadge');
+      lvEl.className = levelBadgeClass(q.level);
+      lvEl.textContent = levelLabelText(q.level);
+
+      const histEl = document.getElementById('qHistoryBadge');
+      if (state.wrongIds.includes(q.id)) {
+        histEl.textContent = '⚠️ Câu từng sai';
+        histEl.style.background = 'var(--danger-soft)';
+        histEl.style.color = 'var(--danger)';
+      } else if (state.masteredIds.includes(q.id)) {
+        histEl.textContent = '✅ Đã thuộc';
+        histEl.style.background = 'var(--success-soft)';
+        histEl.style.color = 'var(--success)';
+      } else {
+        histEl.textContent = 'Chưa làm';
+        histEl.style.background = 'var(--surface-alt)';
+        histEl.style.color = 'var(--text-muted)';
+      }
+
+      document.getElementById('qContentText').textContent = q.question;
+
+      const svgWrap = document.getElementById('qSvgContainer');
+      if (q.svg) {
+        svgWrap.innerHTML = q.svg;
+        svgWrap.classList.remove('hidden');
+      } else {
+        svgWrap.innerHTML = '';
+        svgWrap.classList.add('hidden');
+      }
+
+      const chosen = state.sessionAnswers[q.id];
+      const hasAnswered = chosen !== undefined;
+      const keys = ['A', 'B', 'C', 'D'];
+
+      const optsContainer = document.getElementById('qOptionsList');
+      optsContainer.innerHTML = '';
+
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        if (hasAnswered) {
+          if (idx === q.correct) {
+            btn.classList.add('correct-choice');
+          } else if (idx === chosen && chosen !== q.correct) {
+            btn.classList.add('wrong-choice');
+          }
+        }
+        const cleanLabel = optText.replace(/^[a-dA-D]\.\s*/, '');
+        btn.innerHTML = '<span class="option-key">' + keys[idx] + '</span><span>' + escapeHtml(cleanLabel) + '</span>';
+        btn.addEventListener('click', () => selectPracticeAnswer(idx));
+        optsContainer.appendChild(btn);
+      });
+
+      const explBox = document.getElementById('qExplanationBox');
+      if (hasAnswered) {
+        const isCorrect = chosen === q.correct;
+        explBox.classList.remove('hidden');
+        explBox.classList.toggle('is-correct', isCorrect);
+        explBox.classList.toggle('is-wrong', !isCorrect);
+        document.getElementById('explStatusTitle').textContent = isCorrect
+          ? '✅ Chính xác! Giải thích chi tiết:'
+          : '❌ Chưa chính xác! Đáp án đúng là ' + keys[q.correct] + ' — Giải thích chi tiết:';
+        document.getElementById('explCorrectKey').textContent = 'Đáp án chuẩn: ' + keys[q.correct];
+        document.getElementById('explBodyText').textContent = q.explanation;
+      } else {
+        explBox.classList.add('hidden');
+      }
+
+      document.getElementById('btnPrevQ').disabled = state.currentIndex === 0;
+      document.getElementById('btnNextQ').disabled = state.currentIndex === list.length - 1;
+
+      renderPracticePalette();
+    }
+
+    function selectPracticeAnswer(choiceIdx) {
+      cancelAutoNext();
+      const q = state.practiceList[state.currentIndex];
+      if (!q) return;
+
+      state.sessionAnswers[q.id] = choiceIdx;
+      state.sessionAttempts += 1;
+      const isCorrect = choiceIdx === q.correct;
+
+      if (isCorrect) {
+        state.sessionCorrect += 1;
+        if (!state.masteredIds.includes(q.id)) {
+          state.masteredIds.push(q.id);
+        }
+        if (state.mode === 'wrong' || state.autoRemoveWrong) {
+          state.wrongIds = state.wrongIds.filter(id => id !== q.id);
+        }
+      } else {
+        if (!state.wrongIds.includes(q.id)) {
+          state.wrongIds.push(q.id);
+        }
+        state.masteredIds = state.masteredIds.filter(id => id !== q.id);
+      }
+
+      saveState();
+      renderPracticeView();
+
+      if (isCorrect && state.autoNextOnCorrect && state.currentIndex < state.practiceList.length - 1) {
+        const banner = document.getElementById('autoNextBanner');
+        banner.classList.remove('hidden');
+        autoNextTimer = setTimeout(() => {
+          banner.classList.add('hidden');
+          navigateQuestion(1);
+        }, state.autoNextDelay);
+      }
+    }
+
+    function cancelAutoNext() {
+      if (autoNextTimer) {
+        clearTimeout(autoNextTimer);
+        autoNextTimer = null;
+      }
+      const banner = document.getElementById('autoNextBanner');
+      if (banner) banner.classList.add('hidden');
+    }
+
+    function navigateQuestion(delta) {
+      cancelAutoNext();
+      const nextIdx = state.currentIndex + delta;
+      if (nextIdx >= 0 && nextIdx < state.practiceList.length) {
+        state.currentIndex = nextIdx;
+        renderPracticeView();
+      }
+    }
+
+    function jumpToFirstUnanswered() {
+      cancelAutoNext();
+      const idx = state.practiceList.findIndex(q => state.sessionAnswers[q.id] === undefined);
+      if (idx !== -1) {
+        state.currentIndex = idx;
+        renderPracticeView();
+      } else {
+        showToast('Bạn đã trả lời tất cả các câu trong danh sách này!');
+      }
+    }
+
+    function renderPracticePalette() {
+      const grid = document.getElementById('practicePaletteGrid');
+      grid.innerHTML = '';
+      let answeredCount = 0;
+
+      state.practiceList.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pal-btn';
+        if (idx === state.currentIndex) btn.classList.add('current');
+
+        const ans = state.sessionAnswers[q.id];
+        if (ans !== undefined) {
+          answeredCount++;
+          btn.classList.add(ans === q.correct ? 'pal-correct' : 'pal-wrong');
+        } else if (state.wrongIds.includes(q.id)) {
+          btn.classList.add('pal-wrong');
+        } else if (state.masteredIds.includes(q.id)) {
+          btn.classList.add('pal-correct');
+        }
+
+        btn.textContent = String(idx + 1);
+        btn.addEventListener('click', () => {
+          cancelAutoNext();
+          state.currentIndex = idx;
+          renderPracticeView();
+        });
+        grid.appendChild(btn);
+      });
+
+      document.getElementById('sidebarProgressText').textContent = answeredCount + ' / ' + state.practiceList.length + ' đã làm';
+    }
+
+    /* =========================================================================
+       STANDARD 40-QUESTION MOCK EXAM (TNUT STRUCTURE)
+       ========================================================================= */
+    function seededShuffle(arr, seed) {
+      const copy = [...arr];
+      let s = seed;
+      for (let i = copy.length - 1; i > 0; i--) {
+        s = (s * 1664525 + 1013904223) % 4294967296;
+        const j = s % (i + 1);
+        const tmp = copy[i];
+        copy[i] = copy[j];
+        copy[j] = tmp;
+      }
+      return copy;
+    }
+
+    function buildStratified40Questions(preset) {
+      if (preset === 'hard') {
+        const lv34 = QUESTIONS.filter(q => q.level >= 3);
+        const shuffled = [...lv34].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, 40).sort((a, b) => a.chapter - b.chapter || a.id - b.id);
+      }
+
+      const seedMap = { de1: 202601, de2: 202602, de3: 202603 };
+      const isSeeded = seedMap[preset] !== undefined;
+      const baseSeed = seedMap[preset] || Math.floor(Math.random() * 999999);
+
+      // TNUT Standard 40-question distribution: 8 chapters (Chapters 2..9) × 5 questions per chapter = 40 questions
+      let selected = [];
+      for (let ch = 2; ch <= 9; ch++) {
+        const chapQs = QUESTIONS.filter(q => q.chapter === ch);
+        const pool = isSeeded ? seededShuffle(chapQs, baseSeed + ch * 31) : [...chapQs].sort(() => Math.random() - 0.5);
+        selected.push(...pool.slice(0, 5));
+      }
+      return selected;
+    }
+
+    function generateNewExam() {
+      if (examState.timerInterval) {
+        clearInterval(examState.timerInterval);
+        examState.timerInterval = null;
+      }
+
+      const preset = document.getElementById('selectExamPreset').value;
+      const durMin = parseInt(document.getElementById('selectExamDuration').value, 10) || 60;
+
+      examState.questions = buildStratified40Questions(preset);
+      examState.currentIndex = 0;
+      examState.answers = {};
+      examState.flagged = {};
+      examState.durationSec = durMin * 60;
+      examState.remainingSec = durMin * 60;
+      examState.submitted = false;
+
+      document.getElementById('examResultBanner').classList.add('hidden');
+      document.getElementById('btnSubmitExam').disabled = false;
+      document.getElementById('examSidebarStatus').textContent = 'Đang làm bài';
+
+      updateExamTimerUI();
+      examState.timerInterval = setInterval(() => {
+        if (examState.submitted) return;
+        examState.remainingSec -= 1;
+        updateExamTimerUI();
+        if (examState.remainingSec <= 0) {
+          submitExam();
+          showToast('⏰ Đã hết thời gian làm bài! Hệ thống tự động chấm điểm.');
+        }
+      }, 1000);
+
+      renderExamQuestion();
+    }
+
+    function changeExamDuration() {
+      if (!examState.submitted && Object.keys(examState.answers).length === 0) {
+        const durMin = parseInt(document.getElementById('selectExamDuration').value, 10) || 60;
+        examState.durationSec = durMin * 60;
+        examState.remainingSec = durMin * 60;
+        updateExamTimerUI();
+      } else {
+        generateNewExam();
+      }
+    }
+
+    function updateExamTimerUI() {
+      const m = Math.floor(examState.remainingSec / 60);
+      const s = examState.remainingSec % 60;
+      const el = document.getElementById('examTimerDisplay');
+      el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      el.classList.toggle('low-time', examState.remainingSec <= 300 && !examState.submitted);
+    }
+
+    function renderExamQuestion() {
+      const list = examState.questions;
+      if (!list || list.length === 0) return;
+
+      const idx = examState.currentIndex;
+      const q = list[idx];
+      const keys = ['A', 'B', 'C', 'D'];
+      const instant = document.getElementById('chkExamInstantFeedback').checked;
+
+      document.getElementById('examQPosBadge').textContent = 'Câu ' + (idx + 1) + ' / ' + list.length;
+      document.getElementById('examQCodeBadge').textContent = 'Câu ' + q.code;
+      document.getElementById('examQChapBadge').textContent = q.chapterName;
+
+      const lvEl = document.getElementById('examQLevelBadge');
+      lvEl.className = levelBadgeClass(q.level);
+      lvEl.textContent = levelLabelText(q.level);
+
+      const flagBtn = document.getElementById('btnFlagExamQ');
+      const isFlagged = !!examState.flagged[q.id];
+      flagBtn.classList.toggle('active-toggle', isFlagged);
+      flagBtn.textContent = isFlagged ? '🚩 Đã đánh dấu xem lại' : '🚩 Đánh dấu xem lại';
+
+      document.getElementById('examQContentText').textContent = q.question;
+
+      const svgWrap = document.getElementById('examQSvgContainer');
+      if (q.svg) {
+        svgWrap.innerHTML = q.svg;
+        svgWrap.classList.remove('hidden');
+      } else {
+        svgWrap.innerHTML = '';
+        svgWrap.classList.add('hidden');
+      }
+
+      const chosen = examState.answers[q.id];
+      const showCorrection = examState.submitted || (instant && chosen !== undefined);
+
+      const optsContainer = document.getElementById('examQOptionsList');
+      optsContainer.innerHTML = '';
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        if (examState.submitted) btn.disabled = true;
+
+        if (showCorrection) {
+          if (optIdx === q.correct) {
+            btn.classList.add('correct-choice');
+          } else if (optIdx === chosen && chosen !== q.correct) {
+            btn.classList.add('wrong-choice');
+          }
+        } else if (chosen === optIdx) {
+          btn.classList.add('selected-exam');
+        }
+
+        const cleanLabel = optText.replace(/^[a-dA-D]\.\s*/, '');
+        btn.innerHTML = '<span class="option-key">' + keys[optIdx] + '</span><span>' + escapeHtml(cleanLabel) + '</span>';
+        btn.addEventListener('click', () => selectExamAnswer(optIdx));
+        optsContainer.appendChild(btn);
+      });
+
+      const explBox = document.getElementById('examExplanationBox');
+      if (showCorrection) {
+        const isCorrect = chosen === q.correct;
+        explBox.classList.remove('hidden');
+        explBox.classList.toggle('is-correct', isCorrect);
+        explBox.classList.toggle('is-wrong', !isCorrect);
+        const statusStr = chosen === undefined
+          ? '⚠️ Bạn bỏ trống câu này! Đáp án đúng là ' + keys[q.correct]
+          : (isCorrect ? '✅ Bạn đã chọn ĐÚNG!' : '❌ Bạn chọn ' + keys[chosen] + ' (Sai) — Đáp án đúng là ' + keys[q.correct]);
+        document.getElementById('examExplStatusTitle').textContent = statusStr;
+        document.getElementById('examExplCorrectKey').textContent = 'Đáp án chuẩn: ' + keys[q.correct];
+        document.getElementById('examExplBodyText').textContent = q.explanation;
+      } else {
+        explBox.classList.add('hidden');
+      }
+
+      document.getElementById('btnExamPrev').disabled = idx === 0;
+      document.getElementById('btnExamNext').disabled = idx === list.length - 1;
+      document.getElementById('examAnsweredCounter').textContent =
+        'Đã chọn: ' + Object.keys(examState.answers).length + ' / ' + list.length + ' câu';
+
+      renderExamPalette();
+    }
+
+    function selectExamAnswer(optIdx) {
+      if (examState.submitted) return;
+      const q = examState.questions[examState.currentIndex];
+      if (!q) return;
+      examState.answers[q.id] = optIdx;
+      renderExamQuestion();
+    }
+
+    function toggleFlagExamQuestion() {
+      const q = examState.questions[examState.currentIndex];
+      if (!q) return;
+      examState.flagged[q.id] = !examState.flagged[q.id];
+      renderExamQuestion();
+    }
+
+    function navigateExamQuestion(delta) {
+      const next = examState.currentIndex + delta;
+      if (next >= 0 && next < examState.questions.length) {
+        examState.currentIndex = next;
+        renderExamQuestion();
+      }
+    }
+
+    function renderExamPalette() {
+      const grid = document.getElementById('examPaletteGrid');
+      grid.innerHTML = '';
+      const instant = document.getElementById('chkExamInstantFeedback').checked;
+
+      examState.questions.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pal-btn';
+        if (idx === examState.currentIndex) btn.classList.add('current');
+        if (examState.flagged[q.id]) btn.classList.add('pal-flagged');
+
+        const ans = examState.answers[q.id];
+        if (examState.submitted || (instant && ans !== undefined)) {
+          btn.classList.add(ans === q.correct ? 'pal-correct' : 'pal-wrong');
+        } else if (ans !== undefined) {
+          btn.classList.add('pal-answered');
+        }
+
+        btn.textContent = String(idx + 1);
+        btn.addEventListener('click', () => {
+          examState.currentIndex = idx;
+          renderExamQuestion();
+        });
+        grid.appendChild(btn);
+      });
+    }
+
+    function submitExam() {
+      if (examState.submitted) return;
+      examState.submitted = true;
+      if (examState.timerInterval) {
+        clearInterval(examState.timerInterval);
+        examState.timerInterval = null;
+      }
+
+      let correctCount = 0;
+      let wrongInExam = 0;
+      const chapStats = {};
+
+      examState.questions.forEach(q => {
+        if (!chapStats[q.chapter]) chapStats[q.chapter] = { ok: 0, total: 0 };
+        chapStats[q.chapter].total += 1;
+
+        const chosen = examState.answers[q.id];
+        if (chosen === q.correct) {
+          correctCount += 1;
+          chapStats[q.chapter].ok += 1;
+          if (!state.masteredIds.includes(q.id)) state.masteredIds.push(q.id);
+        } else {
+          wrongInExam += 1;
+          if (!state.wrongIds.includes(q.id)) state.wrongIds.push(q.id);
+        }
+      });
+
+      saveState();
+      updateStatsBar();
+
+      const score8 = (correctCount * 0.2).toFixed(1).replace('.', ',');
+      const score10Num = (correctCount / 40) * 10;
+      const score10 = score10Num.toFixed(2).replace('.', ',');
+
+      let grade = 'F (Chưa đạt)';
+      if (score10Num >= 8.5) grade = 'A (Giỏi)';
+      else if (score10Num >= 7.0) grade = 'B (Khá)';
+      else if (score10Num >= 5.5) grade = 'C (Trung bình)';
+      else if (score10Num >= 4.0) grade = 'D (Đạt)';
+
+      const spentSec = examState.durationSec - examState.remainingSec;
+      const spentMin = Math.floor(spentSec / 60);
+      const spentRemSec = spentSec % 60;
+
+      document.getElementById('resCorrectCount').textContent = correctCount + ' / 40';
+      document.getElementById('resScore8').textContent = score8 + ' / 8,0đ';
+      document.getElementById('resScore10').textContent = score10 + ' / 10đ';
+      document.getElementById('resGradeLetter').textContent = grade;
+      document.getElementById('examResultSubline').textContent =
+        'Thời gian hoàn thành: ' + spentMin + ' phút ' + spentRemSec + ' giây • Đã tự động lưu ' + wrongInExam + ' câu sai vào mục Làm lại câu sai.';
+
+      const chapParts = [];
+      for (let ch = 2; ch <= 9; ch++) {
+        if (chapStats[ch]) {
+          chapParts.push('Chương ' + ch + ': ' + chapStats[ch].ok + '/' + chapStats[ch].total);
+        }
+      }
+      document.getElementById('examChapterBreakdown').textContent = '📊 Phân tích theo chương: ' + chapParts.join(' • ');
+
+      document.getElementById('examResultBanner').classList.remove('hidden');
+      document.getElementById('btnSubmitExam').disabled = true;
+      document.getElementById('examSidebarStatus').textContent = 'Đã chấm điểm';
+      renderExamQuestion();
+    }
+
+    function retryExamWrongQuestions() {
+      const wrongList = examState.questions.filter(q => examState.answers[q.id] !== q.correct);
+      if (wrongList.length === 0) {
+        showToast('🎉 Bạn đã làm đúng tuyệt đối 40/40 câu trong đề này!');
+        return;
+      }
+      wrongList.forEach(q => {
+        if (!state.wrongIds.includes(q.id)) state.wrongIds.push(q.id);
+      });
+      saveState();
+      switchMode('wrong');
+      showToast('🔁 Đang chuyển sang làm lại các câu sai!');
+    }
+
+    /* =========================================================================
+       FORMULA CHEAT SHEET & FULL QUESTION BANK BROWSER
+       ========================================================================= */
+    function renderBankSearch() {
+      const query = (document.getElementById('inputSearchBank').value || '').trim().toLowerCase();
+      const container = document.getElementById('bankSearchList');
+      container.innerHTML = '';
+
+      const keys = ['A', 'B', 'C', 'D'];
+      const matches = QUESTIONS.filter(q => {
+        if (!query) return true;
+        return (
+          q.code.toLowerCase().includes(query) ||
+          q.question.toLowerCase().includes(query) ||
+          q.explanation.toLowerCase().includes(query) ||
+          q.options.some(o => o.toLowerCase().includes(query))
+        );
+      });
+
+      document.getElementById('searchResultCountTitle').textContent =
+        'Danh sách tra cứu (' + matches.length + ' / ' + QUESTIONS.length + ' câu hỏi)';
+
+      matches.forEach(q => {
+        const item = document.createElement('div');
+        item.style.border = '1px solid var(--border)';
+        item.style.borderRadius = '10px';
+        item.style.padding = '12px 14px';
+        item.style.background = 'var(--surface-alt)';
+
+        const cleanCorrectOpt = q.options[q.correct].replace(/^[a-dA-D]\.\s*/, '');
+        item.innerHTML =
+          '<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;">' +
+            '<span class="tag tag-code">Câu ' + escapeHtml(q.code) + ' (' + escapeHtml(q.chapterName) + ')</span>' +
+            '<span class="' + levelBadgeClass(q.level) + '">' + levelLabelText(q.level) + '</span>' +
+          '</div>' +
+          '<div style="font-weight:700;font-size:14.5px;margin-bottom:6px;">' + escapeHtml(q.question) + '</div>' +
+          '<div style="color:var(--success);font-weight:700;font-size:13.5px;margin-bottom:4px;">✅ Đáp án đúng: ' + keys[q.correct] + '. ' + escapeHtml(cleanCorrectOpt) + '</div>' +
+          '<div style="font-size:13px;color:var(--text-muted);">💡 <strong>Giải thích:</strong> ' + escapeHtml(q.explanation) + '</div>';
+        container.appendChild(item);
+      });
+    }
+
+    /* =========================================================================
+       RESET MODAL & KEYBOARD SHORTCUTS
+       ========================================================================= */
+    function openResetModal() {
+      document.getElementById('resetModal').classList.add('open');
+    }
+
+    function closeResetModal() {
+      document.getElementById('resetModal').classList.remove('open');
+    }
+
+    function confirmResetAll() {
+      state.masteredIds = [];
+      state.wrongIds = [];
+      state.sessionAnswers = {};
+      state.sessionAttempts = 0;
+      state.sessionCorrect = 0;
+      saveState();
+      closeResetModal();
+      applyPracticeFilters();
+      showToast('🔄 Đã xóa toàn bộ lịch sử làm bài!');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA')) {
+        return;
+      }
+      const key = e.key.toLowerCase();
+      if (state.mode === 'practice' || state.mode === 'wrong') {
+        if (key === '1' || key === 'a') selectPracticeAnswer(0);
+        else if (key === '2' || key === 'b') selectPracticeAnswer(1);
+        else if (key === '3' || key === 'c') selectPracticeAnswer(2);
+        else if (key === '4' || key === 'd') selectPracticeAnswer(3);
+        else if (e.key === 'ArrowRight' || e.key === ' ') {
+          e.preventDefault();
+          navigateQuestion(1);
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          navigateQuestion(-1);
+        } else if (key === 'r') {
+          retryCurrentQuestion();
+        }
+      } else if (state.mode === 'exam') {
+        if (key === '1' || key === 'a') selectExamAnswer(0);
+        else if (key === '2' || key === 'b') selectExamAnswer(1);
+        else if (key === '3' || key === 'c') selectExamAnswer(2);
+        else if (key === '4' || key === 'd') selectExamAnswer(3);
+        else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          navigateExamQuestion(1);
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          navigateExamQuestion(-1);
+        }
+      }
+    });
+
+    // Initialize app on load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      applyThemeAndPerformance();
+      applyPracticeFilters();
+    });
+  </script>
+</body>
+</html>
